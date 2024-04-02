@@ -68,17 +68,3 @@ Crear un middleware global que loguee la ruta, método y la fecha-hora en que se
 Al finalizar este hito deberás tener un proyecto de node con la estructura básica del proyecto individual de e-commerce. Los endpoints principales del proyecto deberán ser capaces de recibir solicitudes desde el cliente y activar un middleware que nos permita identificar mediante un log en la terminal la ruta invocada.
 
 </details>
-
-<style>
-  h1 { color: #713f12; }
-  h2 { color: #2563eb; }
-  h3 { color: #a855f7; }
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  pre {
-    padding: 10px;
-  }
-</style>
