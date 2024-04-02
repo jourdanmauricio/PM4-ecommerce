@@ -1,7 +1,5 @@
-import { UsersRespository } from './users.repository';
-export declare class UsersService {
-    private usersRepository;
-    constructor(usersRepository: UsersRespository);
+export declare class UsersRespository {
+    private users;
     getUsers(): Promise<({
         id: number;
         name: string;
