@@ -8,33 +8,67 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
-const users_repository_1 = require("./users.repository");
+const typeorm_1 = require("@nestjs/typeorm");
+const users_entity_1 = require("./users.entity");
+const typeorm_2 = require("typeorm");
 let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
     }
-    getUsers() {
-        return this.usersRepository.getUsers();
+    async findAll() {
+        const users = await this.usersRepository.find();
+        return users;
     }
-    getUserById(id) {
-        return this.usersRepository.getById(id);
+    async findOne(id) {
+        const user = await this.usersRepository.findOne({
+            where: { id },
+            relations: ['orders'],
+        });
+        if (!user)
+            throw new common_1.NotFoundException('User not found');
+        return user;
     }
-    createUser(user) {
-        return this.usersRepository.createUser(user);
+    async findByEmail(email) {
+        const user = await this.usersRepository.findOneBy({ email });
+        return user;
     }
-    updateUser(id, changes) {
-        return this.usersRepository.updateUser(id, changes);
+    create(user) {
+        const newUser = this.usersRepository.create(user);
+        const result = this.usersRepository.save(newUser).catch((err) => {
+            throw new common_1.BadRequestException(err.detail);
+        });
+        return result;
     }
-    deleteUser(id) {
-        return this.usersRepository.deleteUser(id);
+    async update(id, changes) {
+        const user = await this.findOne(id);
+        this.usersRepository.merge(user, changes);
+        return this.usersRepository.save(user);
+    }
+    async remove(id) {
+        const user = await this.findOne(id);
+        await this.usersRepository.delete(id);
+        return user;
+    }
+    async signin(credentials) {
+        const { email, password } = credentials;
+        const user = await this.findByEmail(email);
+        if (!user)
+            throw new common_1.UnauthorizedException('Email o password incorrectos');
+        if (user.password !== password)
+            throw new common_1.UnauthorizedException('Email o password incorrectos');
+        return user;
     }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_repository_1.UsersRespository])
+    __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], UsersService);
 //# sourceMappingURL=users.service.js.map

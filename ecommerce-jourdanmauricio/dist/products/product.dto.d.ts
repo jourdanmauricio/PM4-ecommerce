@@ -1,13 +1,11 @@
-export declare class Product {
-    readonly id: number;
+import { v4 as uuid } from 'uuid';
+export declare class CreateProductDto {
     readonly name: string;
     readonly description: string;
     readonly price: number;
-    readonly stock: boolean;
-    readonly imgUrl: string;
-}
-declare const CreateProductDto_base: import("@nestjs/mapped-types").MappedType<Omit<Product, "id">>;
-export declare class CreateProductDto extends CreateProductDto_base {
+    readonly stock: number;
+    readonly imgUrl?: string;
+    readonly categoryId: uuid;
 }
 declare const UpdateProductDto_base: import("@nestjs/mapped-types").MappedType<Partial<CreateProductDto>>;
 export declare class UpdateProductDto extends UpdateProductDto_base {

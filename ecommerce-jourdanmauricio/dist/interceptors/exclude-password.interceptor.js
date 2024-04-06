@@ -12,31 +12,19 @@ const operators_1 = require("rxjs/operators");
 let ExcludePasswordInterceptor = class ExcludePasswordInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((data) => {
+            const dataCopy = JSON.parse(JSON.stringify(data));
             if (Array.isArray(data)) {
-                const dataCopy = JSON.parse(JSON.stringify(data));
                 dataCopy.forEach((user) => {
-                    if (user && typeof user === 'object') {
-                        delete user.password;
-                        this.excludePasswordFromNestedObjects(user);
-                    }
+                    delete user.password;
                 });
                 return dataCopy;
             }
             else if (!Array.isArray(data) && typeof data === 'object') {
-                const dataCopy = JSON.parse(JSON.stringify(data));
                 delete dataCopy.password;
-                this.excludePasswordFromNestedObjects(dataCopy);
                 return dataCopy;
             }
             return data;
         }));
-    }
-    excludePasswordFromNestedObjects(data) {
-        for (const key in data) {
-            if (data.hasOwnProperty(key) && typeof data[key] === 'object') {
-                this.excludePasswordFromNestedObjects(data[key]);
-            }
-        }
     }
 };
 exports.ExcludePasswordInterceptor = ExcludePasswordInterceptor;

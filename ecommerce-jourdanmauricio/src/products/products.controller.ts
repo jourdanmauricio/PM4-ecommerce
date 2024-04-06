@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -11,42 +12,50 @@ import {
 } from '@nestjs/common';
 
 import { ProductsService } from './products.service';
-import {
-  CreateProductDto,
-  FilterProductDto,
-  UpdateProductDto,
-} from './product.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { CreateProductDto, UpdateProductDto } from './product.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { v4 as uuid } from 'uuid';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  getProducts(@Query() params: FilterProductDto) {
-    return this.productsService.getProducts(params);
+  getProducts(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '5',
+  ) {
+    return this.productsService.findAll(Number(page), Number(limit));
   }
 
   @Get(':id')
-  getProductById(@Param('id') id: string) {
-    return this.productsService.getProductById(Number(id));
+  getProductById(@Param('id', ParseUUIDPipe) id: uuid) {
+    return this.productsService.findOne(id);
   }
 
   @Post()
   @UseGuards(AuthGuard)
   createProduct(@Body() product: CreateProductDto) {
-    return this.productsService.createProduct(product);
+    return this.productsService.create(product);
   }
 
   @Put(':id')
   @UseGuards(AuthGuard)
-  updateProduct(@Param('id') id: string, @Body() payload: UpdateProductDto) {
-    return this.productsService.updateProduct(Number(id), payload);
+  updateProduct(
+    @Param('id', ParseUUIDPipe) id: uuid,
+    @Body() payload: UpdateProductDto,
+  ) {
+    return this.productsService.update(id, payload);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  deleteProduct(@Param('id') id: string) {
-    return this.productsService.deleteProduct(Number(id));
+  deleteProduct(@Param('id', ParseUUIDPipe) id: uuid) {
+    return this.productsService.remove(id);
+  }
+
+  @Post('seeder')
+  addCategories() {
+    return this.productsService.preLoadProducts();
   }
 }

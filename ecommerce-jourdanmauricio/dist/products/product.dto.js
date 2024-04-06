@@ -8,42 +8,46 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FilterProductDto = exports.UpdateProductDto = exports.CreateProductDto = exports.Product = void 0;
+exports.FilterProductDto = exports.UpdateProductDto = exports.CreateProductDto = void 0;
 const mapped_types_1 = require("@nestjs/mapped-types");
+const uuid_1 = require("uuid");
 const class_validator_1 = require("class-validator");
-class Product {
+class CreateProductDto {
 }
-exports.Product = Product;
+exports.CreateProductDto = CreateProductDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], Product.prototype, "name", void 0);
+], CreateProductDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], Product.prototype, "description", void 0);
+], CreateProductDto.prototype, "description", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsPositive)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
-], Product.prototype, "price", void 0);
+], CreateProductDto.prototype, "price", void 0);
 __decorate([
-    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsPositive)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Boolean)
-], Product.prototype, "stock", void 0);
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "stock", void 0);
 __decorate([
     (0, class_validator_1.IsUrl)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], Product.prototype, "imgUrl", void 0);
-class CreateProductDto extends (0, mapped_types_1.OmitType)(Product, ['id']) {
-}
-exports.CreateProductDto = CreateProductDto;
+], CreateProductDto.prototype, "imgUrl", void 0);
+__decorate([
+    (0, class_validator_1.IsUUID)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", typeof (_a = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _a : Object)
+], CreateProductDto.prototype, "categoryId", void 0);
 class UpdateProductDto extends (0, mapped_types_1.PartialType)(CreateProductDto) {
 }
 exports.UpdateProductDto = UpdateProductDto;

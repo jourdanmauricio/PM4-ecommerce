@@ -1,30 +1,25 @@
 import { ProductsService } from './products.service';
-import { CreateProductDto, FilterProductDto, UpdateProductDto } from './product.dto';
+import { CreateProductDto, UpdateProductDto } from './product.dto';
+import { v4 as uuid } from 'uuid';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
-    getProducts(params: FilterProductDto): Promise<{
+    getProducts(page?: string, limit?: string): Promise<{
         page: number;
-        products: {
-            id: number;
-            name: string;
-            description: string;
-            price: number;
-            stock: boolean;
-            imgUrl: string;
-        }[];
+        total: number;
+        products: import("./products.entity").Product[];
     }>;
-    getProductById(id: string): Promise<import("./product.dto").Product>;
-    createProduct(product: CreateProductDto): Promise<import("./product.dto").Product>;
-    updateProduct(id: string, payload: UpdateProductDto): Promise<{
-        id: number;
-        name: string;
-        description: string;
-        price: number;
-        stock: boolean;
-        imgUrl: string;
-    }>;
-    deleteProduct(id: string): Promise<{
-        id: number;
+    getProductById(id: uuid): Promise<import("./products.entity").Product>;
+    createProduct(product: CreateProductDto): Promise<import("./products.entity").Product>;
+    updateProduct(id: uuid, payload: UpdateProductDto): Promise<import("./products.entity").Product>;
+    deleteProduct(id: uuid): Promise<import("./products.entity").Product>;
+    addCategories(): Promise<{
+        message: string;
+        total: number;
+        data: {
+            created: any[];
+            found: any[];
+            errors: any[];
+        };
     }>;
 }

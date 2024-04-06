@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UseGuards,
@@ -12,8 +14,9 @@ import {
 
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 // import { ExcludePasswordInterceptor } from 'src/interceptors/exclude-password.interceptor';
+import { v4 as uuid } from 'uuid';
 
 @Controller('users')
 export class UsersController {
@@ -22,30 +25,37 @@ export class UsersController {
   @Get()
   @UseGuards(AuthGuard)
   getUsers() {
-    return this.usersService.getUsers();
+    return this.usersService.findAll();
   }
 
   @Get(':id')
   @UseGuards(AuthGuard)
   // @UseInterceptors(ExcludePasswordInterceptor)
-  getUserById(@Param('id') id: string) {
-    return this.usersService.getUserById(Number(id));
+  getUserById(@Param('id', ParseUUIDPipe) id: uuid) {
+    return this.usersService.findOne(id);
   }
 
   @Post()
   createUser(@Body() user: CreateUserDto) {
-    return this.usersService.createUser(user);
+    try {
+      return this.usersService.create(user);
+    } catch (err) {
+      throw new BadRequestException('Constrint PK');
+    }
   }
 
   @Put(':id')
   @UseGuards(AuthGuard)
-  updateUser(@Param('id') id: string, @Body() payload: UpdateUserDto) {
-    return this.usersService.updateUser(Number(id), payload);
+  updateUser(
+    @Param('id', ParseUUIDPipe) id: uuid,
+    @Body() payload: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, payload);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  deleteUser(@Param('id') id: string) {
-    return this.usersService.deleteUser(Number(id));
+  deleteUser(@Param('id', ParseUUIDPipe) id: uuid) {
+    return this.usersService.remove(id);
   }
 }

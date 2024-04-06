@@ -1,8 +1,8 @@
-import { UsersRespository } from 'src/users/users.repository';
 import { SigninDto } from './auth.dto';
+import { UsersService } from 'src/users/users.service';
 export declare class AuthService {
-    private usersRepository;
-    constructor(usersRepository: UsersRespository);
+    private usersService;
+    constructor(usersService: UsersService);
     getAuths(): string;
-    signin(credentials: SigninDto): Promise<import("../users/user.dto").User>;
+    signin(credentials: SigninDto): Promise<import("../users/users.entity").User>;
 }

@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
-import { UsersRespository } from 'src/users/users.repository';
 import { SigninDto } from './auth.dto';
+
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersRepository: UsersRespository) {}
+  constructor(private usersService: UsersService) {}
 
   getAuths() {
     return 'Get all auths?';
   }
 
   signin(credentials: SigninDto) {
-    return this.usersRepository.signin(credentials);
+    return this.usersService.signin(credentials);
   }
 }

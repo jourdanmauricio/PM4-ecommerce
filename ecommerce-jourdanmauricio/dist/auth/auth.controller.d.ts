@@ -4,5 +4,5 @@ export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
     getAuths(): string;
-    signin(credentials: SigninDto): Promise<import("../users/user.dto").User>;
+    signin(credentials: SigninDto): Promise<import("../users/users.entity").User>;
 }

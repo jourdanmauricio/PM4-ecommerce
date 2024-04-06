@@ -1,4 +1,4 @@
-import { PartialType, OmitType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/mapped-types';
 
 import {
   IsString,
@@ -6,11 +6,10 @@ import {
   IsEmail,
   Length,
   IsOptional,
+  IsInt,
 } from 'class-validator';
 
-export class User {
-  readonly id: number;
-
+export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
@@ -28,9 +27,9 @@ export class User {
   @IsNotEmpty()
   readonly address: string;
 
-  @IsString()
+  @IsInt()
   @IsNotEmpty()
-  readonly phone: string;
+  readonly phone: number;
 
   @IsString()
   @IsOptional()
@@ -40,7 +39,5 @@ export class User {
   @IsOptional()
   readonly city?: string;
 }
-
-export class CreateUserDto extends OmitType(User, ['id']) {}
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

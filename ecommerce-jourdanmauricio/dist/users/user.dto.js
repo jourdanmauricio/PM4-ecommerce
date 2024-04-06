@@ -9,51 +9,48 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateUserDto = exports.CreateUserDto = exports.User = void 0;
+exports.UpdateUserDto = exports.CreateUserDto = void 0;
 const mapped_types_1 = require("@nestjs/mapped-types");
 const class_validator_1 = require("class-validator");
-class User {
+class CreateUserDto {
 }
-exports.User = User;
+exports.CreateUserDto = CreateUserDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], User.prototype, "name", void 0);
+], CreateUserDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], User.prototype, "email", void 0);
+], CreateUserDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Length)(8),
     __metadata("design:type", String)
-], User.prototype, "password", void 0);
+], CreateUserDto.prototype, "password", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], User.prototype, "address", void 0);
+], CreateUserDto.prototype, "address", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsInt)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], User.prototype, "phone", void 0);
+    __metadata("design:type", Number)
+], CreateUserDto.prototype, "phone", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], User.prototype, "country", void 0);
+], CreateUserDto.prototype, "country", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], User.prototype, "city", void 0);
-class CreateUserDto extends (0, mapped_types_1.OmitType)(User, ['id']) {
-}
-exports.CreateUserDto = CreateUserDto;
+], CreateUserDto.prototype, "city", void 0);
 class UpdateUserDto extends (0, mapped_types_1.PartialType)(CreateUserDto) {
 }
 exports.UpdateUserDto = UpdateUserDto;

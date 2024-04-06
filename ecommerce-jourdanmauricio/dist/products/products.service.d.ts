@@ -1,30 +1,28 @@
-import { ProductsRepository } from './products.repository';
-import { CreateProductDto, FilterProductDto, Product, UpdateProductDto } from './product.dto';
+import { v4 as uuid } from 'uuid';
+import { CreateProductDto, UpdateProductDto } from './product.dto';
+import { Repository } from 'typeorm';
+import { Product } from './products.entity';
+import { Category } from 'src/categories/categories.entity';
 export declare class ProductsService {
     private productsRepository;
-    constructor(productsRepository: ProductsRepository);
-    getProducts(params?: FilterProductDto): Promise<{
+    private categoriesRepository;
+    constructor(productsRepository: Repository<Product>, categoriesRepository: Repository<Category>);
+    findAll(page: number, limit: number): Promise<{
         page: number;
-        products: {
-            id: number;
-            name: string;
-            description: string;
-            price: number;
-            stock: boolean;
-            imgUrl: string;
-        }[];
+        total: number;
+        products: Product[];
     }>;
-    getProductById(id: number): Promise<Product>;
-    createProduct(product: CreateProductDto): Promise<Product>;
-    updateProduct(id: number, changes: UpdateProductDto): Promise<{
-        id: number;
-        name: string;
-        description: string;
-        price: number;
-        stock: boolean;
-        imgUrl: string;
-    }>;
-    deleteProduct(id: number): Promise<{
-        id: number;
+    findOne(id: uuid): Promise<Product>;
+    create(product: CreateProductDto): Promise<Product>;
+    update(id: uuid, changes: UpdateProductDto): Promise<Product>;
+    remove(id: uuid): Promise<Product>;
+    preLoadProducts(): Promise<{
+        message: string;
+        total: number;
+        data: {
+            created: any[];
+            found: any[];
+            errors: any[];
+        };
     }>;
 }

@@ -1,20 +1,16 @@
-import { PartialType, OmitType } from '@nestjs/mapped-types';
-
+import { PartialType } from '@nestjs/mapped-types';
+import { v4 as uuid } from 'uuid';
 import {
   IsString,
   IsNumber,
   IsUrl,
   IsNotEmpty,
   IsPositive,
-  IsBoolean,
   IsOptional,
-  // Min,
+  IsUUID,
 } from 'class-validator';
-// isEmail, isDate, etc
 
-export class Product {
-  readonly id: number;
-
+export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
@@ -28,16 +24,18 @@ export class Product {
   @IsNotEmpty()
   readonly price: number;
 
-  @IsBoolean()
+  @IsPositive()
   @IsNotEmpty()
-  readonly stock: boolean;
+  readonly stock: number;
 
   @IsUrl()
-  @IsNotEmpty()
-  readonly imgUrl: string;
-}
+  @IsOptional()
+  readonly imgUrl?: string;
 
-export class CreateProductDto extends OmitType(Product, ['id']) {}
+  @IsUUID()
+  @IsNotEmpty()
+  readonly categoryId: uuid;
+}
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
 
