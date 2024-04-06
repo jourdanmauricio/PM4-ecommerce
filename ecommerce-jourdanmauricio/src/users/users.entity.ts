@@ -39,13 +39,15 @@ export class User {
   // timestamptz -> asigna zona horaria
   @Exclude()
   @CreateDateColumn({
+    name: 'created_at',
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createAt: Date;
+  createdAt: Date;
 
   @Exclude()
   @CreateDateColumn({
+    name: 'updated_at',
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })

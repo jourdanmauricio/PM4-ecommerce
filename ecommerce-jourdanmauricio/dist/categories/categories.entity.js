@@ -31,14 +31,16 @@ __decorate([
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
+        name: 'created_at',
         type: 'timestamptz',
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Category.prototype, "createAt", void 0);
+], Category.prototype, "createdAt", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
+        name: 'updated_at',
         type: 'timestamptz',
         default: () => 'CURRENT_TIMESTAMP',
     }),

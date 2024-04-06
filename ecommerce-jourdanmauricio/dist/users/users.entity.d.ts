@@ -8,7 +8,7 @@ export declare class User {
     country: string;
     address: string;
     city: string;
-    createAt: Date;
+    createdAt: Date;
     updatedAt: Date;
     orders: Order[];
 }

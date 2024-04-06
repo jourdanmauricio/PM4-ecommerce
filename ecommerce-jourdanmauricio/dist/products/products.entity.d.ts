@@ -7,7 +7,7 @@ export declare class Product {
     price: number;
     stock: number;
     imgUrl?: string;
-    createAt: Date;
+    createdAt: Date;
     updatedAt: Date;
     category: Category;
     orderDetails: OrderDetail[];

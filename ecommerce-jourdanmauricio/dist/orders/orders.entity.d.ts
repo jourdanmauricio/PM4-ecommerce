@@ -3,7 +3,7 @@ import { OrderDetail } from './orderDetails.entity';
 export declare class Order {
     id: string;
     date: Date;
-    createAt: Date;
+    createdAt: Date;
     updatedAt: Date;
     user: User;
     orderDetail: OrderDetail;
