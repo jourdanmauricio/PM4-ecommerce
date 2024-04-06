@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Post,
   Put,
@@ -22,8 +24,8 @@ export class ProductsController {
 
   @Get()
   getProducts(
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '5',
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
   ) {
     return this.productsService.findAll(Number(page), Number(limit));
   }

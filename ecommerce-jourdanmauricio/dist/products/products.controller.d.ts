@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
-    getProducts(page?: string, limit?: string): Promise<{
+    getProducts(page: number, limit: number): Promise<{
         page: number;
         total: number;
         products: import("./products.entity").Product[];
