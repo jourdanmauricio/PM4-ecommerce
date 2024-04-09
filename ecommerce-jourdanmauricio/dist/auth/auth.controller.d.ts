@@ -1,8 +1,8 @@
 import { AuthService } from './auth.service';
-import { SigninDto } from './auth.dto';
+import { LoginUserDto } from './auth.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
     getAuths(): string;
-    signin(credentials: SigninDto): Promise<import("../entities/users.entity").Users>;
+    signin(credentials: LoginUserDto): Promise<import("../entities/users.entity").Users>;
 }

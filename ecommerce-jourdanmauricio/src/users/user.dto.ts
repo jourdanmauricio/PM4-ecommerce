@@ -4,14 +4,18 @@ import {
   IsString,
   IsNotEmpty,
   IsEmail,
-  Length,
   IsOptional,
   IsInt,
+  MinLength,
+  MaxLength,
+  Matches,
 } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(80)
   readonly name: string;
 
   @IsEmail()
@@ -20,11 +24,17 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Length(8)
+  @MinLength(8)
+  @MaxLength(15)
+  @Matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
+  )
   readonly password: string;
 
   @IsString()
-  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(80)
+  @IsOptional()
   readonly address: string;
 
   @IsInt()
@@ -33,10 +43,14 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
+  @MinLength(5)
+  @MaxLength(20)
   readonly country?: string;
 
   @IsString()
   @IsOptional()
+  @MinLength(5)
+  @MaxLength(20)
   readonly city?: string;
 }
 
