@@ -58,11 +58,11 @@ delete from users;
 ################################
 # Carga inicial desde terminal #
 ################################
-curl --request POST \
+curl --request GET \
   --url http://localhost:3000/categories/seeder \
   --header 'Authorization: Basic am91cmRhbm1hdUBnbWFpbC5jb206MTIzNDU2Nzg='
 
-curl --request POST \
+curl --request GET \
   --url http://localhost:3000/products/seeder \
   --header 'Authorization: Basic am91cmRhbm1hdUBnbWFpbC5jb206MTIzNDU2Nzg='
 ```
