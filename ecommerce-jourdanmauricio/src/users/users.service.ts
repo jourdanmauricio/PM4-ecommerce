@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from '../entities/users.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { SigninDto } from 'src/auth/auth.dto';
+import { LoginUserDto } from 'src/auth/auth.dto';
 
 @Injectable()
 export class UsersService {
@@ -58,7 +58,7 @@ export class UsersService {
     return user;
   }
 
-  async signin(credentials: SigninDto) {
+  async signin(credentials: LoginUserDto) {
     const { email, password } = credentials;
 
     const user = await this.findByEmail(email);
