@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './users.entity';
+import { Users } from '../entities/users.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { SigninDto } from 'src/auth/auth.dto';
@@ -14,8 +14,8 @@ import { SigninDto } from 'src/auth/auth.dto';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectRepository(Users)
+    private usersRepository: Repository<Users>,
   ) {}
 
   async findAll() {
@@ -23,7 +23,7 @@ export class UsersService {
     return users;
   }
 
-  async findOne(id: uuid): Promise<User> {
+  async findOne(id: uuid): Promise<Users> {
     const user = await this.usersRepository.findOne({
       where: { id },
       relations: ['orders'],
@@ -32,12 +32,12 @@ export class UsersService {
     return user;
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<Users> {
     const user = await this.usersRepository.findOneBy({ email });
     return user;
   }
 
-  create(user: CreateUserDto): Promise<User> {
+  create(user: CreateUserDto): Promise<Users> {
     const newUser = this.usersRepository.create(user);
 
     const result = this.usersRepository.save(newUser).catch((err: any) => {

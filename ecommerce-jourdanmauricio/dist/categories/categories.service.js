@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoriesService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const categories_entity_1 = require("./categories.entity");
+const categories_entity_1 = require("../entities/categories.entity");
 const typeorm_2 = require("typeorm");
 const initialData = require("./../data/initialData.json");
 let CategoriesService = class CategoriesService {
@@ -25,45 +25,23 @@ let CategoriesService = class CategoriesService {
     async getCategories() {
         return await this.categoriesRepository.find();
     }
-    async addCategorie(data) {
-        const newCategory = this.categoriesRepository.create(data);
-        const result = await this.categoriesRepository
-            .save(newCategory)
-            .catch((err) => {
-            throw new common_1.BadRequestException(err.detail);
-        });
-        return result;
-    }
     async preLoadCategories() {
-        const catCreated = [];
-        const catFound = [];
-        const unique_categories = new Set(initialData.map((product) => product.category));
-        for await (const category of unique_categories) {
-            const found = await this.categoriesRepository.findOneBy({
-                name: category,
-            });
-            if (!found) {
-                const newCategory = await this.addCategorie({ name: category });
-                catCreated.push({ id: newCategory.id, name: newCategory.name });
-            }
-            else {
-                catFound.push({ id: found.id, name: found.name });
-            }
-        }
-        return {
-            message: 'Initial categories loaded successfully',
-            total: unique_categories.size,
-            data: {
-                created: catCreated,
-                found: catFound,
-            },
-        };
+        initialData.map(async (el) => {
+            await this.categoriesRepository
+                .createQueryBuilder()
+                .insert()
+                .into(categories_entity_1.Categories)
+                .values({ name: el.category })
+                .orIgnore(`("name") DO NOTHING`)
+                .execute();
+        });
+        return { message: 'Categories added' };
     }
 };
 exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(categories_entity_1.Category)),
+    __param(0, (0, typeorm_1.InjectRepository)(categories_entity_1.Categories)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], CategoriesService);
 //# sourceMappingURL=categories.service.js.map

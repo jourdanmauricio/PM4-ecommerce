@@ -1,5 +1,5 @@
-import { Order } from 'src/orders/orders.entity';
-export declare class User {
+import { Orders } from 'src/entities/orders.entity';
+export declare class Users {
     id: string;
     name: string;
     email: string;
@@ -10,5 +10,5 @@ export declare class User {
     city: string;
     createdAt: Date;
     updatedAt: Date;
-    orders: Order[];
+    orders: Orders[];
 }

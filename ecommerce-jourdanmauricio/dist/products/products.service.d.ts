@@ -1,28 +1,22 @@
 import { v4 as uuid } from 'uuid';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { Repository } from 'typeorm';
-import { Product } from './products.entity';
-import { Category } from 'src/categories/categories.entity';
+import { Products } from '../entities/products.entity';
+import { Categories } from 'src/entities/categories.entity';
 export declare class ProductsService {
     private productsRepository;
     private categoriesRepository;
-    constructor(productsRepository: Repository<Product>, categoriesRepository: Repository<Category>);
+    constructor(productsRepository: Repository<Products>, categoriesRepository: Repository<Categories>);
     findAll(page: number, limit: number): Promise<{
         page: number;
         total: number;
-        products: Product[];
+        products: Products[];
     }>;
-    findOne(id: uuid): Promise<Product>;
-    create(product: CreateProductDto): Promise<Product>;
-    update(id: uuid, changes: UpdateProductDto): Promise<Product>;
-    remove(id: uuid): Promise<Product>;
+    findOne(id: uuid): Promise<Products>;
+    create(product: CreateProductDto): Promise<Products>;
+    update(id: uuid, changes: UpdateProductDto): Promise<Products>;
+    remove(id: uuid): Promise<Products>;
     preLoadProducts(): Promise<{
         message: string;
-        total: number;
-        data: {
-            created: any[];
-            found: any[];
-            errors: any[];
-        };
     }>;
 }

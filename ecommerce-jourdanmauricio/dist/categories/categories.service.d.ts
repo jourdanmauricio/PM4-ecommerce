@@ -1,17 +1,10 @@
-import { Category } from './categories.entity';
+import { Categories } from '../entities/categories.entity';
 import { Repository } from 'typeorm';
-import { CreateCategoryDto } from './categories.dto';
 export declare class CategoriesService {
     private categoriesRepository;
-    constructor(categoriesRepository: Repository<Category>);
-    getCategories(): Promise<Category[]>;
-    addCategorie(data: CreateCategoryDto): Promise<Category>;
+    constructor(categoriesRepository: Repository<Categories>);
+    getCategories(): Promise<Categories[]>;
     preLoadCategories(): Promise<{
         message: string;
-        total: number;
-        data: {
-            created: any[];
-            found: any[];
-        };
     }>;
 }

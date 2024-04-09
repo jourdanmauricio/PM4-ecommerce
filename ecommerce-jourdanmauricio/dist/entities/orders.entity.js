@@ -9,29 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Order = void 0;
+exports.Orders = void 0;
 const typeorm_1 = require("typeorm");
-const uuid_1 = require("uuid");
-const users_entity_1 = require("../users/users.entity");
+const users_entity_1 = require("./users.entity");
 const orderDetails_entity_1 = require("./orderDetails.entity");
 const class_transformer_1 = require("class-transformer");
-let Order = class Order {
-    constructor() {
-        this.id = (0, uuid_1.v4)();
-    }
+let Orders = class Orders {
 };
-exports.Order = Order;
+exports.Orders = Orders;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
-], Order.prototype, "id", void 0);
+], Orders.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({
         type: 'timestamptz',
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Order.prototype, "date", void 0);
+], Orders.prototype, "date", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
@@ -40,7 +36,7 @@ __decorate([
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Order.prototype, "createdAt", void 0);
+], Orders.prototype, "createdAt", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
@@ -49,18 +45,17 @@ __decorate([
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Order.prototype, "updatedAt", void 0);
+], Orders.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => users_entity_1.User, (user) => user.orders),
+    (0, typeorm_1.ManyToOne)(() => users_entity_1.Users, (user) => user.orders),
     (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
-    __metadata("design:type", users_entity_1.User)
-], Order.prototype, "user", void 0);
+    __metadata("design:type", users_entity_1.Users)
+], Orders.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => orderDetails_entity_1.OrderDetail, (detail) => detail.order, { nullable: true }),
-    (0, typeorm_1.JoinColumn)({ name: 'order_details_id' }),
-    __metadata("design:type", orderDetails_entity_1.OrderDetail)
-], Order.prototype, "orderDetail", void 0);
-exports.Order = Order = __decorate([
+    (0, typeorm_1.OneToOne)(() => orderDetails_entity_1.OrderDetails, (orderDetail) => orderDetail.order),
+    __metadata("design:type", orderDetails_entity_1.OrderDetails)
+], Orders.prototype, "orderDetail", void 0);
+exports.Orders = Orders = __decorate([
     (0, typeorm_1.Entity)('orders')
-], Order);
+], Orders);
 //# sourceMappingURL=orders.entity.js.map

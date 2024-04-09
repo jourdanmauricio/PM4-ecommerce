@@ -1,9 +1,9 @@
 import { DataSource, Repository } from 'typeorm';
-import { Order } from './orders.entity';
+import { Orders } from '../entities/orders.entity';
 import { CreateOrderDto } from './order.dto';
 import { UsersService } from 'src/users/users.service';
 import { ProductsService } from 'src/products/products.service';
-import { OrderDetail } from './orderDetails.entity';
+import { OrderDetails } from '../entities/orderDetails.entity';
 import { v4 as uuid } from 'uuid';
 export declare class OrdersService {
     private ordersRepository;
@@ -11,8 +11,8 @@ export declare class OrdersService {
     private usersService;
     private productsService;
     private dataSource;
-    constructor(ordersRepository: Repository<Order>, orderDetailsRepository: Repository<OrderDetail>, usersService: UsersService, productsService: ProductsService, dataSource: DataSource);
-    findAll(): Promise<Order[]>;
-    findOne(id: uuid): Promise<Order>;
-    create(order: CreateOrderDto): Promise<OrderDetail>;
+    constructor(ordersRepository: Repository<Orders>, orderDetailsRepository: Repository<OrderDetails>, usersService: UsersService, productsService: ProductsService, dataSource: DataSource);
+    findAll(): Promise<Orders[]>;
+    findOne(id: uuid): Promise<Orders>;
+    create(order: CreateOrderDto): Promise<Orders>;
 }

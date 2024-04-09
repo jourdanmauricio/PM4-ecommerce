@@ -7,19 +7,13 @@ export declare class ProductsController {
     getProducts(page: number, limit: number): Promise<{
         page: number;
         total: number;
-        products: import("./products.entity").Product[];
+        products: import("../entities/products.entity").Products[];
     }>;
-    getProductById(id: uuid): Promise<import("./products.entity").Product>;
-    createProduct(product: CreateProductDto): Promise<import("./products.entity").Product>;
-    updateProduct(id: uuid, payload: UpdateProductDto): Promise<import("./products.entity").Product>;
-    deleteProduct(id: uuid): Promise<import("./products.entity").Product>;
-    addCategories(): Promise<{
+    addProducts(): Promise<{
         message: string;
-        total: number;
-        data: {
-            created: any[];
-            found: any[];
-            errors: any[];
-        };
     }>;
+    getProductById(id: uuid): Promise<import("../entities/products.entity").Products>;
+    createProduct(product: CreateProductDto): Promise<import("../entities/products.entity").Products>;
+    updateProduct(id: uuid, payload: UpdateProductDto): Promise<import("../entities/products.entity").Products>;
+    deleteProduct(id: uuid): Promise<import("../entities/products.entity").Products>;
 }

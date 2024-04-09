@@ -9,25 +9,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Category = void 0;
+exports.Categories = void 0;
 const class_transformer_1 = require("class-transformer");
-const products_entity_1 = require("../products/products.entity");
+const products_entity_1 = require("./products.entity");
 const typeorm_1 = require("typeorm");
-const uuid_1 = require("uuid");
-let Category = class Category {
-    constructor() {
-        this.id = (0, uuid_1.v4)();
-    }
+let Categories = class Categories {
 };
-exports.Category = Category;
+exports.Categories = Categories;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
-], Category.prototype, "id", void 0);
+], Categories.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, unique: true }),
     __metadata("design:type", String)
-], Category.prototype, "name", void 0);
+], Categories.prototype, "name", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
@@ -36,7 +32,7 @@ __decorate([
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Category.prototype, "createdAt", void 0);
+], Categories.prototype, "createdAt", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
@@ -45,12 +41,13 @@ __decorate([
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Category.prototype, "updatedAt", void 0);
+], Categories.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => products_entity_1.Product, (product) => product.category),
+    (0, typeorm_1.OneToMany)(() => products_entity_1.Products, (product) => product.category),
+    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", Array)
-], Category.prototype, "products", void 0);
-exports.Category = Category = __decorate([
+], Categories.prototype, "products", void 0);
+exports.Categories = Categories = __decorate([
     (0, typeorm_1.Entity)('categories')
-], Category);
+], Categories);
 //# sourceMappingURL=categories.entity.js.map

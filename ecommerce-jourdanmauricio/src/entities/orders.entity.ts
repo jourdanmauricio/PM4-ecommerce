@@ -6,15 +6,16 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
-import { User } from 'src/users/users.entity';
-import { OrderDetail } from './orderDetails.entity';
+// import { v4 as uuid } from 'uuid';
+import { Users } from 'src/entities/users.entity';
+import { OrderDetails } from './orderDetails.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity('orders')
-export class Order {
+export class Orders {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
+  // = uuid();
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -39,14 +40,13 @@ export class Order {
   updatedAt: Date;
 
   // user_id: (Relación 1:N) con users.
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne(() => Users, (user) => user.orders)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: Users;
 
   // Relación 1:1 con orderDetails.
   // Para que funcione la relación bidireccional debemos
   // especificar contra que campo se resuelve la referencia
-  @OneToOne(() => OrderDetail, (detail) => detail.order, { nullable: true })
-  @JoinColumn({ name: 'order_details_id' })
-  orderDetail: OrderDetail;
+  @OneToOne(() => OrderDetails, (orderDetail) => orderDetail.order)
+  orderDetail: OrderDetails;
 }

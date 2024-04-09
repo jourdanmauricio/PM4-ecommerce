@@ -4,5 +4,5 @@ export declare class AuthService {
     private usersService;
     constructor(usersService: UsersService);
     getAuths(): string;
-    signin(credentials: SigninDto): Promise<import("../users/users.entity").User>;
+    signin(credentials: SigninDto): Promise<import("../entities/users.entity").Users>;
 }

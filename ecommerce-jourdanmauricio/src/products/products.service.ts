@@ -9,16 +9,16 @@ import * as initialData from './../data/initialData.json';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from './products.entity';
-import { Category } from 'src/categories/categories.entity';
+import { Products } from '../entities/products.entity';
+import { Categories } from 'src/entities/categories.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectRepository(Product)
-    private productsRepository: Repository<Product>,
-    @InjectRepository(Category)
-    private categoriesRepository: Repository<Category>,
+    @InjectRepository(Products)
+    private productsRepository: Repository<Products>,
+    @InjectRepository(Categories)
+    private categoriesRepository: Repository<Categories>,
   ) {}
 
   async findAll(page: number, limit: number) {
@@ -30,7 +30,7 @@ export class ProductsService {
     return { page, total, products };
   }
 
-  async findOne(id: uuid): Promise<Product> {
+  async findOne(id: uuid): Promise<Products> {
     const product = await this.productsRepository.findOne({
       where: { id },
       relations: ['category'],
@@ -39,7 +39,7 @@ export class ProductsService {
     return product;
   }
 
-  async create(product: CreateProductDto): Promise<Product> {
+  async create(product: CreateProductDto): Promise<Products> {
     const category = await this.categoriesRepository.findOneBy({
       id: product.categoryId,
     });
@@ -71,45 +71,26 @@ export class ProductsService {
   }
 
   async preLoadProducts() {
-    const prodCreated = [];
-    const prodFound = [];
-    const prodError = [];
+    const categories = await this.categoriesRepository.find();
 
-    for await (const product of initialData) {
-      const found = await this.productsRepository.findOneBy({
-        name: product.name,
-      });
-      if (!found) {
-        const category = await this.categoriesRepository.findOneBy({
-          name: product.category,
-        });
-        if (!category) {
-          prodError.push({
-            product: product.name,
-            error: `Category not found: ${product.category}`,
-          });
-        } else {
-          const newProd = {
-            ...product,
-            categoryId: category.id,
-          };
-          delete newProd.category;
-          const newProduct = await this.create(newProd);
-          prodCreated.push({ id: newProduct.id, name: newProduct.name });
-        }
-      } else {
-        prodFound.push({ id: found.id, name: found.name });
+    initialData.map(async (product) => {
+      const category = categories.find((cat) => cat.name === product.category);
+
+      if (category) {
+        const newProd = {
+          ...product,
+          category: category,
+        };
+
+        await this.productsRepository
+          .createQueryBuilder()
+          .insert()
+          .values(newProd)
+          .orUpdate(['description', 'price', 'imgUrl', 'stock'], ['name'])
+          .execute();
       }
-    }
+    });
 
-    return {
-      message: 'Initial products loaded successfully',
-      total: initialData.length,
-      data: {
-        created: prodCreated,
-        found: prodFound,
-        errors: prodError,
-      },
-    };
+    return { message: 'Products added' };
   }
 }

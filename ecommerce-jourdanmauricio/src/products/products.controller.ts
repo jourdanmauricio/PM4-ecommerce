@@ -30,6 +30,12 @@ export class ProductsController {
     return this.productsService.findAll(Number(page), Number(limit));
   }
 
+  @Get('seeder')
+  addProducts() {
+    console.log('AAAAAAAAAAAAAAAAAAAA');
+    return this.productsService.preLoadProducts();
+  }
+
   @Get(':id')
   getProductById(@Param('id', ParseUUIDPipe) id: uuid) {
     return this.productsService.findOne(id);
@@ -54,10 +60,5 @@ export class ProductsController {
   @UseGuards(AuthGuard)
   deleteProduct(@Param('id', ParseUUIDPipe) id: uuid) {
     return this.productsService.remove(id);
-  }
-
-  @Post('seeder')
-  addCategories() {
-    return this.productsService.preLoadProducts();
   }
 }

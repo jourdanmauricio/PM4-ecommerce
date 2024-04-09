@@ -4,9 +4,9 @@ import { v4 as uuid } from 'uuid';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
-    getUsers(): Promise<import("./users.entity").User[]>;
-    getUserById(id: uuid): Promise<import("./users.entity").User>;
-    createUser(user: CreateUserDto): Promise<import("./users.entity").User>;
-    updateUser(id: uuid, payload: UpdateUserDto): Promise<import("./users.entity").User>;
-    deleteUser(id: uuid): Promise<import("./users.entity").User>;
+    getUsers(): Promise<import("../entities/users.entity").Users[]>;
+    getUserById(id: uuid): Promise<import("../entities/users.entity").Users>;
+    createUser(user: CreateUserDto): Promise<import("../entities/users.entity").Users>;
+    updateUser(id: uuid, payload: UpdateUserDto): Promise<import("../entities/users.entity").Users>;
+    deleteUser(id: uuid): Promise<import("../entities/users.entity").Users>;
 }

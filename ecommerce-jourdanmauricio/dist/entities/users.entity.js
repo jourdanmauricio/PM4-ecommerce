@@ -9,51 +9,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Product = void 0;
+exports.Users = void 0;
 const class_transformer_1 = require("class-transformer");
-const categories_entity_1 = require("../categories/categories.entity");
-const orderDetails_entity_1 = require("../orders/orderDetails.entity");
+const orders_entity_1 = require("./orders.entity");
 const typeorm_1 = require("typeorm");
-const uuid_1 = require("uuid");
-let Product = class Product {
-    constructor() {
-        this.id = (0, uuid_1.v4)();
-    }
+let Users = class Users {
 };
-exports.Product = Product;
+exports.Users = Users;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
-], Product.prototype, "id", void 0);
+], Users.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    __metadata("design:type", String)
+], Users.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, unique: true }),
     __metadata("design:type", String)
-], Product.prototype, "name", void 0);
+], Users.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'text' }),
+    (0, class_transformer_1.Exclude)(),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 20 }),
     __metadata("design:type", String)
-], Product.prototype, "description", void 0);
+], Users.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'decimal',
-        precision: 10,
-        scale: 2,
-    }),
+    (0, typeorm_1.Column)({ type: 'bigint', nullable: true }),
     __metadata("design:type", Number)
-], Product.prototype, "price", void 0);
+], Users.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'int',
-    }),
-    __metadata("design:type", Number)
-], Product.prototype, "stock", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        type: 'varchar',
-        default: 'https://res.cloudinary.com/dn7npxeof/image/upload/v1712238917/Henry/PM4-ecommerce/Sin_imagen_disponible_zxruow.webp',
-    }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", String)
-], Product.prototype, "imgUrl", void 0);
+], Users.prototype, "country", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], Users.prototype, "address", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], Users.prototype, "city", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
@@ -62,7 +57,7 @@ __decorate([
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Product.prototype, "createdAt", void 0);
+], Users.prototype, "createdAt", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
@@ -71,17 +66,13 @@ __decorate([
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Product.prototype, "updatedAt", void 0);
+], Users.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => categories_entity_1.Category, (category) => category.products),
-    (0, typeorm_1.JoinColumn)({ name: 'category_id' }),
-    __metadata("design:type", categories_entity_1.Category)
-], Product.prototype, "category", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => orderDetails_entity_1.OrderDetail, (orderDetail) => orderDetail.products),
+    (0, typeorm_1.OneToMany)(() => orders_entity_1.Orders, (order) => order.user),
+    (0, typeorm_1.JoinColumn)({ name: 'orders_id' }),
     __metadata("design:type", Array)
-], Product.prototype, "orderDetails", void 0);
-exports.Product = Product = __decorate([
-    (0, typeorm_1.Entity)('products')
-], Product);
-//# sourceMappingURL=products.entity.js.map
+], Users.prototype, "orders", void 0);
+exports.Users = Users = __decorate([
+    (0, typeorm_1.Entity)('users')
+], Users);
+//# sourceMappingURL=users.entity.js.map

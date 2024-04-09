@@ -1,18 +1,20 @@
 import { Exclude } from 'class-transformer';
-import { Product } from 'src/products/products.entity';
+import { Products } from 'src/entities/products.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+//import { v4 as uuid } from 'uuid';
 
 @Entity('categories')
-export class Category {
+export class Categories {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
+  // = uuid();
 
   @Column({ type: 'varchar', length: 50, unique: true })
   name: string;
@@ -33,6 +35,8 @@ export class Category {
   })
   updatedAt: Date;
 
-  @OneToMany(() => Product, (product) => product.category)
-  products: Product[];
+  // Relación N:1 con productos
+  @OneToMany(() => Products, (product) => product.category)
+  @JoinColumn()
+  products: Products[];
 }

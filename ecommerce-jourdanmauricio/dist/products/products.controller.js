@@ -26,6 +26,10 @@ let ProductsController = class ProductsController {
     getProducts(page, limit) {
         return this.productsService.findAll(Number(page), Number(limit));
     }
+    addProducts() {
+        console.log('AAAAAAAAAAAAAAAAAAAA');
+        return this.productsService.preLoadProducts();
+    }
     getProductById(id) {
         return this.productsService.findOne(id);
     }
@@ -38,9 +42,6 @@ let ProductsController = class ProductsController {
     deleteProduct(id) {
         return this.productsService.remove(id);
     }
-    addCategories() {
-        return this.productsService.preLoadProducts();
-    }
 };
 exports.ProductsController = ProductsController;
 __decorate([
@@ -51,6 +52,12 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "getProducts", null);
+__decorate([
+    (0, common_1.Get)('seeder'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ProductsController.prototype, "addProducts", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
@@ -83,12 +90,6 @@ __decorate([
     __metadata("design:paramtypes", [typeof (_c = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _c : Object]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "deleteProduct", null);
-__decorate([
-    (0, common_1.Post)('seeder'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "addCategories", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])

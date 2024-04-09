@@ -1,57 +1,31 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from './categories.entity';
+import { Categories } from '../entities/categories.entity';
 import { Repository } from 'typeorm';
-import { CreateCategoryDto } from './categories.dto';
 import * as initialData from './../data/initialData.json';
 
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectRepository(Category)
-    private categoriesRepository: Repository<Category>,
+    @InjectRepository(Categories)
+    private categoriesRepository: Repository<Categories>,
   ) {}
 
   async getCategories() {
     return await this.categoriesRepository.find();
   }
 
-  async addCategorie(data: CreateCategoryDto) {
-    const newCategory = this.categoriesRepository.create(data);
-    const result = await this.categoriesRepository
-      .save(newCategory)
-      .catch((err: any) => {
-        throw new BadRequestException(err.detail);
-      });
-    return result;
-  }
-
   async preLoadCategories() {
-    const catCreated = [];
-    const catFound = [];
+    initialData.map(async (el) => {
+      await this.categoriesRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Categories)
+        .values({ name: el.category })
+        .orIgnore(`("name") DO NOTHING`)
+        .execute();
+    });
 
-    const unique_categories = new Set(
-      initialData.map((product) => product.category),
-    );
-
-    for await (const category of unique_categories) {
-      const found = await this.categoriesRepository.findOneBy({
-        name: category,
-      });
-      if (!found) {
-        const newCategory = await this.addCategorie({ name: category });
-        catCreated.push({ id: newCategory.id, name: newCategory.name });
-      } else {
-        catFound.push({ id: found.id, name: found.name });
-      }
-    }
-    return {
-      message: 'Initial categories loaded successfully',
-      total: unique_categories.size,
-      data: {
-        created: catCreated,
-        found: catFound,
-      },
-    };
+    return { message: 'Categories added' };
   }
 }

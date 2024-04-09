@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const initialData = require("./../data/initialData.json");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const products_entity_1 = require("./products.entity");
-const categories_entity_1 = require("../categories/categories.entity");
+const products_entity_1 = require("../entities/products.entity");
+const categories_entity_1 = require("../entities/categories.entity");
 let ProductsService = class ProductsService {
     constructor(productsRepository, categoriesRepository) {
         this.productsRepository = productsRepository;
@@ -67,53 +67,30 @@ let ProductsService = class ProductsService {
         return product;
     }
     async preLoadProducts() {
-        const prodCreated = [];
-        const prodFound = [];
-        const prodError = [];
-        for await (const product of initialData) {
-            const found = await this.productsRepository.findOneBy({
-                name: product.name,
-            });
-            if (!found) {
-                const category = await this.categoriesRepository.findOneBy({
-                    name: product.category,
-                });
-                if (!category) {
-                    prodError.push({
-                        product: product.name,
-                        error: `Category not found: ${product.category}`,
-                    });
-                }
-                else {
-                    const newProd = {
-                        ...product,
-                        categoryId: category.id,
-                    };
-                    delete newProd.category;
-                    const newProduct = await this.create(newProd);
-                    prodCreated.push({ id: newProduct.id, name: newProduct.name });
-                }
+        const categories = await this.categoriesRepository.find();
+        initialData.map(async (product) => {
+            const category = categories.find((cat) => cat.name === product.category);
+            if (category) {
+                const newProd = {
+                    ...product,
+                    category: category,
+                };
+                await this.productsRepository
+                    .createQueryBuilder()
+                    .insert()
+                    .values(newProd)
+                    .orUpdate(['description', 'price', 'imgUrl', 'stock'], ['name'])
+                    .execute();
             }
-            else {
-                prodFound.push({ id: found.id, name: found.name });
-            }
-        }
-        return {
-            message: 'Initial products loaded successfully',
-            total: initialData.length,
-            data: {
-                created: prodCreated,
-                found: prodFound,
-                errors: prodError,
-            },
-        };
+        });
+        return { message: 'Products added' };
     }
 };
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(products_entity_1.Product)),
-    __param(1, (0, typeorm_1.InjectRepository)(categories_entity_1.Category)),
+    __param(0, (0, typeorm_1.InjectRepository)(products_entity_1.Products)),
+    __param(1, (0, typeorm_1.InjectRepository)(categories_entity_1.Categories)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository])
 ], ProductsService);

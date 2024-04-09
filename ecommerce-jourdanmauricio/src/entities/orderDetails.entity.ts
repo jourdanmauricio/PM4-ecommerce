@@ -5,15 +5,17 @@ import {
   OneToOne,
   ManyToMany,
   JoinTable,
+  JoinColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
-import { Order } from './orders.entity';
-import { Product } from 'src/products/products.entity';
+// import { v4 as uuid } from 'uuid';
+import { Orders } from './orders.entity';
+import { Products } from 'src/entities/products.entity';
 
 @Entity('order_details')
-export class OrderDetail {
+export class OrderDetails {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
+  //  = uuid();
 
   @Column({
     type: 'decimal',
@@ -25,11 +27,12 @@ export class OrderDetail {
   // order_id: Relación 1:1 con orders.
   // Para que funcione la relación bidireccional debemos
   // especificar contra que campo se resuelve la referencia
-  @OneToOne(() => Order, (order) => order.orderDetail, { nullable: true })
-  order: Order;
+  @OneToOne(() => Orders, (order) => order.orderDetail)
+  @JoinColumn({ name: 'order_id' })
+  order: Orders;
 
   // Relación N:N con products.
-  @ManyToMany(() => Product, (product) => product.orderDetails)
+  @ManyToMany(() => Products, (product) => product.orderDetails)
   @JoinTable({
     name: 'order_details_products',
     joinColumn: {
@@ -39,5 +42,5 @@ export class OrderDetail {
       name: 'product_id', // Relación con la otra entidad.
     },
   })
-  products: Product[];
+  products: Products[];
 }

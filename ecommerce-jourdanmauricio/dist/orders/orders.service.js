@@ -16,10 +16,10 @@ exports.OrdersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const orders_entity_1 = require("./orders.entity");
+const orders_entity_1 = require("../entities/orders.entity");
 const users_service_1 = require("../users/users.service");
 const products_service_1 = require("../products/products.service");
-const orderDetails_entity_1 = require("./orderDetails.entity");
+const orderDetails_entity_1 = require("../entities/orderDetails.entity");
 let OrdersService = class OrdersService {
     constructor(ordersRepository, orderDetailsRepository, usersService, productsService, dataSource) {
         this.ordersRepository = ordersRepository;
@@ -65,10 +65,10 @@ let OrdersService = class OrdersService {
                 order: resultOrder,
                 products,
             });
-            const resultNewOrderDetail = await queryRunner.manager.save(newOrderDetail);
+            await queryRunner.manager.save(newOrderDetail);
             await queryRunner.commitTransaction();
             await queryRunner.release();
-            return resultNewOrderDetail;
+            return await this.findOne(newOrder.id);
         }
         catch (err) {
             await queryRunner.rollbackTransaction();
@@ -80,8 +80,8 @@ let OrdersService = class OrdersService {
 exports.OrdersService = OrdersService;
 exports.OrdersService = OrdersService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(orders_entity_1.Order)),
-    __param(1, (0, typeorm_1.InjectRepository)(orderDetails_entity_1.OrderDetail)),
+    __param(0, (0, typeorm_1.InjectRepository)(orders_entity_1.Orders)),
+    __param(1, (0, typeorm_1.InjectRepository)(orderDetails_entity_1.OrderDetails)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         users_service_1.UsersService,

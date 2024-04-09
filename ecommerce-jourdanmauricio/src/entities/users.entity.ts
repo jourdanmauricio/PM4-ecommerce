@@ -1,18 +1,21 @@
 import { Exclude } from 'class-transformer';
-import { Order } from 'src/orders/orders.entity';
+import { Orders } from 'src/entities/orders.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+// TypeORM incorpora la generación de UUID
+// import { v4 as uuid } from 'uuid';
 
 @Entity('users')
-export class User {
+export class Users {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
+  // = uuid();
 
   @Column({ type: 'varchar', length: 50 })
   name: string;
@@ -53,7 +56,8 @@ export class User {
   })
   updatedAt: Date;
 
-  // orders_id: Relación 1:N con orders.
-  @OneToMany(() => Order, (order) => order.user)
-  orders: Order[];
+  // Relación 1:N con orders.
+  @OneToMany(() => Orders, (order) => order.user)
+  @JoinColumn({ name: 'orders_id' })
+  orders: Orders[];
 }

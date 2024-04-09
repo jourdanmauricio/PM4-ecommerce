@@ -9,21 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderDetail = void 0;
+exports.OrderDetails = void 0;
 const typeorm_1 = require("typeorm");
-const uuid_1 = require("uuid");
 const orders_entity_1 = require("./orders.entity");
-const products_entity_1 = require("../products/products.entity");
-let OrderDetail = class OrderDetail {
-    constructor() {
-        this.id = (0, uuid_1.v4)();
-    }
+const products_entity_1 = require("./products.entity");
+let OrderDetails = class OrderDetails {
 };
-exports.OrderDetail = OrderDetail;
+exports.OrderDetails = OrderDetails;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
-], OrderDetail.prototype, "id", void 0);
+], OrderDetails.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'decimal',
@@ -31,13 +27,14 @@ __decorate([
         scale: 2,
     }),
     __metadata("design:type", Number)
-], OrderDetail.prototype, "price", void 0);
+], OrderDetails.prototype, "price", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => orders_entity_1.Order, (order) => order.orderDetail, { nullable: true }),
-    __metadata("design:type", orders_entity_1.Order)
-], OrderDetail.prototype, "order", void 0);
+    (0, typeorm_1.OneToOne)(() => orders_entity_1.Orders, (order) => order.orderDetail),
+    (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
+    __metadata("design:type", orders_entity_1.Orders)
+], OrderDetails.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => products_entity_1.Product, (product) => product.orderDetails),
+    (0, typeorm_1.ManyToMany)(() => products_entity_1.Products, (product) => product.orderDetails),
     (0, typeorm_1.JoinTable)({
         name: 'order_details_products',
         joinColumn: {
@@ -48,8 +45,8 @@ __decorate([
         },
     }),
     __metadata("design:type", Array)
-], OrderDetail.prototype, "products", void 0);
-exports.OrderDetail = OrderDetail = __decorate([
+], OrderDetails.prototype, "products", void 0);
+exports.OrderDetails = OrderDetails = __decorate([
     (0, typeorm_1.Entity)('order_details')
-], OrderDetail);
+], OrderDetails);
 //# sourceMappingURL=orderDetails.entity.js.map

@@ -1,20 +1,20 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { Order } from './orders.entity';
+import { Orders } from '../entities/orders.entity';
 import { CreateOrderDto } from './order.dto';
 import { UsersService } from 'src/users/users.service';
 import { ProductsService } from 'src/products/products.service';
-import { OrderDetail } from './orderDetails.entity';
+import { OrderDetails } from '../entities/orderDetails.entity';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class OrdersService {
   constructor(
-    @InjectRepository(Order)
-    private ordersRepository: Repository<Order>,
-    @InjectRepository(OrderDetail)
-    private orderDetailsRepository: Repository<OrderDetail>,
+    @InjectRepository(Orders)
+    private ordersRepository: Repository<Orders>,
+    @InjectRepository(OrderDetails)
+    private orderDetailsRepository: Repository<OrderDetails>,
     private usersService: UsersService,
     private productsService: ProductsService,
     private dataSource: DataSource,
@@ -70,13 +70,12 @@ export class OrdersService {
         products,
       });
 
-      const resultNewOrderDetail =
-        await queryRunner.manager.save(newOrderDetail);
+      await queryRunner.manager.save(newOrderDetail);
 
       await queryRunner.commitTransaction(); //COMMIT
       await queryRunner.release(); // RELEASE
 
-      return resultNewOrderDetail;
+      return await this.findOne(newOrder.id);
     } catch (err) {
       await queryRunner.rollbackTransaction(); // ROLLBACK
       await queryRunner.release(); // RELEASE

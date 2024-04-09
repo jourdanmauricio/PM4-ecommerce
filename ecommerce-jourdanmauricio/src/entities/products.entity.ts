@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Category } from 'src/categories/categories.entity';
-import { OrderDetail } from 'src/orders/orderDetails.entity';
+import { Categories } from 'src/entities/categories.entity';
+import { OrderDetails } from 'src/entities/orderDetails.entity';
 import {
   Entity,
   Column,
@@ -10,12 +10,13 @@ import {
   ManyToMany,
   JoinColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 
 @Entity('products')
-export class Product {
+export class Products {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
+  // = uuid();
 
   @Column({ type: 'varchar', length: 50, unique: true })
   name: string;
@@ -36,7 +37,7 @@ export class Product {
   stock: number;
 
   @Column({
-    type: 'varchar',
+    type: 'text',
     default:
       'https://res.cloudinary.com/dn7npxeof/image/upload/v1712238917/Henry/PM4-ecommerce/Sin_imagen_disponible_zxruow.webp',
   })
@@ -58,13 +59,12 @@ export class Product {
   })
   updatedAt: Date;
 
-  // category_id (Relación 1:N).
-  @ManyToOne(() => Category, (category) => category.products)
+  // Relación 1:N con categorias.
+  @ManyToOne(() => Categories, (category) => category.products)
   @JoinColumn({ name: 'category_id' })
-  category: Category;
+  category: Categories;
 
   // Relación N:N con orderDetails.
-
-  @ManyToMany(() => OrderDetail, (orderDetail) => orderDetail.products)
-  orderDetails: OrderDetail[];
+  @ManyToMany(() => OrderDetails, (orderDetail) => orderDetail.products)
+  orderDetails: OrderDetails[];
 }
