@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType, PickType } from '@nestjs/mapped-types';
 
 import {
   IsString,
@@ -26,9 +26,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(15)
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
-  )
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/)
   readonly password: string;
 
   @IsString()
@@ -55,3 +53,8 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
+
+export class LoginUserDto extends PickType(CreateUserDto, [
+  'email',
+  'password',
+]) {}

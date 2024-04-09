@@ -6,7 +6,6 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-// import { v4 as uuid } from 'uuid';
 import { Users } from 'src/entities/users.entity';
 import { OrderDetails } from './orderDetails.entity';
 import { Exclude } from 'class-transformer';
@@ -15,7 +14,6 @@ import { Exclude } from 'class-transformer';
 export class Orders {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  // = uuid();
 
   @CreateDateColumn({
     type: 'timestamptz',

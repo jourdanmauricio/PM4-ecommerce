@@ -7,7 +7,6 @@ import {
   JoinTable,
   JoinColumn,
 } from 'typeorm';
-// import { v4 as uuid } from 'uuid';
 import { Orders } from './orders.entity';
 import { Products } from 'src/entities/products.entity';
 
@@ -15,7 +14,6 @@ import { Products } from 'src/entities/products.entity';
 export class OrderDetails {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  //  = uuid();
 
   @Column({
     type: 'decimal',

@@ -17,6 +17,7 @@ const auth_module_1 = require("./auth/auth.module");
 const products_module_1 = require("./products/products.module");
 const categories_module_1 = require("./categories/categories.module");
 const orders_module_1 = require("./orders/orders.module");
+const files_module_1 = require("./files/files.module");
 const typeorm_2 = require("./config/typeorm");
 let AppModule = class AppModule {
 };
@@ -37,6 +38,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             categories_module_1.CategoriesModule,
             orders_module_1.OrdersModule,
+            files_module_1.FilesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

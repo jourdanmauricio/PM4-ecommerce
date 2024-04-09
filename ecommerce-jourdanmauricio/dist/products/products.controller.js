@@ -27,7 +27,6 @@ let ProductsController = class ProductsController {
         return this.productsService.findAll(Number(page), Number(limit));
     }
     addProducts() {
-        console.log('AAAAAAAAAAAAAAAAAAAA');
         return this.productsService.preLoadProducts();
     }
     getProductById(id) {

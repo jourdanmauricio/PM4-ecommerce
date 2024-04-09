@@ -10,13 +10,11 @@ import {
   ManyToMany,
   JoinColumn,
 } from 'typeorm';
-// import { v4 as uuid } from 'uuid';
 
 @Entity('products')
 export class Products {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  // = uuid();
 
   @Column({ type: 'varchar', length: 50, unique: true })
   name: string;

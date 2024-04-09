@@ -32,7 +32,6 @@ export class ProductsController {
 
   @Get('seeder')
   addProducts() {
-    console.log('AAAAAAAAAAAAAAAAAAAA');
     return this.productsService.preLoadProducts();
   }
 

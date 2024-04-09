@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateUserDto = exports.CreateUserDto = void 0;
+exports.LoginUserDto = exports.UpdateUserDto = exports.CreateUserDto = void 0;
 const mapped_types_1 = require("@nestjs/mapped-types");
 const class_validator_1 = require("class-validator");
 class CreateUserDto {
@@ -32,7 +32,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.MinLength)(8),
     (0, class_validator_1.MaxLength)(15),
-    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/),
+    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
 __decorate([
@@ -64,4 +64,10 @@ __decorate([
 class UpdateUserDto extends (0, mapped_types_1.PartialType)(CreateUserDto) {
 }
 exports.UpdateUserDto = UpdateUserDto;
+class LoginUserDto extends (0, mapped_types_1.PickType)(CreateUserDto, [
+    'email',
+    'password',
+]) {
+}
+exports.LoginUserDto = LoginUserDto;
 //# sourceMappingURL=user.dto.js.map

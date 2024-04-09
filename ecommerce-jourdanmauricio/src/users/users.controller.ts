@@ -9,13 +9,11 @@ import {
   Post,
   Put,
   UseGuards,
-  // UseInterceptors,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-// import { ExcludePasswordInterceptor } from 'src/interceptors/exclude-password.interceptor';
 import { v4 as uuid } from 'uuid';
 
 @Controller('users')
@@ -30,7 +28,6 @@ export class UsersController {
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  // @UseInterceptors(ExcludePasswordInterceptor)
   getUserById(@Param('id', ParseUUIDPipe) id: uuid) {
     return this.usersService.findOne(id);
   }

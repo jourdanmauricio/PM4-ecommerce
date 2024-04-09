@@ -8,14 +8,11 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-// TypeORM incorpora la generación de UUID
-// import { v4 as uuid } from 'uuid';
 
 @Entity('users')
 export class Users {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  // = uuid();
 
   @Column({ type: 'varchar', length: 50 })
   name: string;

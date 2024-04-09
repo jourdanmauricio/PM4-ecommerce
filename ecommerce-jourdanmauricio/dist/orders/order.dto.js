@@ -23,6 +23,7 @@ __decorate([
 ], CreateOrderDto.prototype, "userId", void 0);
 __decorate([
     (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ArrayMinSize)(1),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Array)
 ], CreateOrderDto.prototype, "products", void 0);
