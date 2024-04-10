@@ -19,6 +19,7 @@ const files_service_1 = require("./files.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const products_service_1 = require("../products/products.service");
 const uuid_1 = require("uuid");
+const auth_guard_1 = require("../guards/auth.guard");
 let FilesController = class FilesController {
     constructor(filesService, productsService) {
         this.filesService = filesService;
@@ -36,6 +37,7 @@ let FilesController = class FilesController {
 exports.FilesController = FilesController;
 __decorate([
     (0, common_1.Put)('uploadImage/:id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image')),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({

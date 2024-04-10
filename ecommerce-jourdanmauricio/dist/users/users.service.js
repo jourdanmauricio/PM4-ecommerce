@@ -15,8 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const users_entity_1 = require("../entities/users.entity");
 const typeorm_2 = require("typeorm");
+const bcrypt = require("bcrypt");
+const users_entity_1 = require("../entities/users.entity");
 let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
@@ -59,9 +60,10 @@ let UsersService = class UsersService {
         const { email, password } = credentials;
         const user = await this.findByEmail(email);
         if (!user)
-            throw new common_1.UnauthorizedException('Email o password incorrectos');
-        if (user.password !== password)
-            throw new common_1.UnauthorizedException('Email o password incorrectos');
+            throw new common_1.UnauthorizedException('Credenciales inválidas');
+        const matchPass = await bcrypt.compare(password, user.password);
+        if (!matchPass)
+            throw new common_1.BadRequestException('Credenciales inválidas');
         return user;
     }
 };

@@ -19,6 +19,7 @@ const categories_module_1 = require("./categories/categories.module");
 const orders_module_1 = require("./orders/orders.module");
 const files_module_1 = require("./files/files.module");
 const typeorm_2 = require("./config/typeorm");
+const jwt_1 = require("@nestjs/jwt");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -39,6 +40,11 @@ exports.AppModule = AppModule = __decorate([
             categories_module_1.CategoriesModule,
             orders_module_1.OrdersModule,
             files_module_1.FilesModule,
+            jwt_1.JwtModule.register({
+                global: true,
+                signOptions: { expiresIn: '1h' },
+                secret: process.env.JWT_SECRET,
+            }),
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

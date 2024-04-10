@@ -23,6 +23,9 @@ let AuthController = class AuthController {
     getAuths() {
         return this.authService.getAuths();
     }
+    createUser(user) {
+        return this.authService.signup(user);
+    }
     signin(credentials) {
         return this.authService.signin(credentials);
     }
@@ -34,6 +37,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "getAuths", null);
+__decorate([
+    (0, common_1.Post)('signup'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.CreateUserDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "createUser", null);
 __decorate([
     (0, common_1.Post)('signin'),
     __param(0, (0, common_1.Body)()),

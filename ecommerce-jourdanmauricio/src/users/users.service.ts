@@ -4,11 +4,13 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from '../entities/users.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
+
+import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { Users } from '../entities/users.entity';
 import { LoginUserDto } from 'src/auth/auth.dto';
 
 @Injectable()
@@ -62,10 +64,11 @@ export class UsersService {
     const { email, password } = credentials;
 
     const user = await this.findByEmail(email);
-    if (!user) throw new UnauthorizedException('Email o password incorrectos');
+    if (!user) throw new UnauthorizedException('Credenciales inválidas');
 
-    if (user.password !== password)
-      throw new UnauthorizedException('Email o password incorrectos');
+    const matchPass = await bcrypt.compare(password, user.password);
+
+    if (!matchPass) throw new BadRequestException('Credenciales inválidas');
 
     return user;
   }

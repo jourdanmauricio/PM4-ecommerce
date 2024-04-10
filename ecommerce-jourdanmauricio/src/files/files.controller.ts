@@ -8,12 +8,14 @@ import {
   ParseUUIDPipe,
   Put,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductsService } from 'src/products/products.service';
 import { v4 as uuid } from 'uuid';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('files')
 export class FilesController {
@@ -22,8 +24,8 @@ export class FilesController {
     private productsService: ProductsService,
   ) {}
 
-  // ProductsService
   @Put('uploadImage/:id')
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async uploadProductImage(
     @Param('id', ParseUUIDPipe) id: uuid,

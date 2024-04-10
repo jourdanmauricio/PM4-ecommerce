@@ -21,7 +21,7 @@ export class Users {
   email: string;
 
   @Exclude()
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 150 })
   password: string;
 
   @Column({ type: 'bigint', nullable: true })

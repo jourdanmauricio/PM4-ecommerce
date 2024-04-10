@@ -1,7 +1,7 @@
-import { CreateUserDto, UpdateUserDto } from './user.dto';
-import { Users } from '../entities/users.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { Users } from '../entities/users.entity';
 import { LoginUserDto } from 'src/auth/auth.dto';
 export declare class UsersService {
     private usersRepository;

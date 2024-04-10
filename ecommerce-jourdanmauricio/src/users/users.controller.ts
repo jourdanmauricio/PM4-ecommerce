@@ -1,18 +1,16 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
   ParseUUIDPipe,
-  Post,
   Put,
   UseGuards,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { UpdateUserDto } from './user.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { v4 as uuid } from 'uuid';
 
@@ -30,15 +28,6 @@ export class UsersController {
   @UseGuards(AuthGuard)
   getUserById(@Param('id', ParseUUIDPipe) id: uuid) {
     return this.usersService.findOne(id);
-  }
-
-  @Post()
-  createUser(@Body() user: CreateUserDto) {
-    try {
-      return this.usersService.create(user);
-    } catch (err) {
-      throw new BadRequestException('Constrint PK');
-    }
   }
 
   @Put(':id')

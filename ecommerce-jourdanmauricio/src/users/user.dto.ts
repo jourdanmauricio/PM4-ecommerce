@@ -15,7 +15,7 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
-  @MaxLength(80)
+  @MaxLength(50)
   readonly name: string;
 
   @IsEmail()
@@ -28,6 +28,10 @@ export class CreateUserDto {
   @MaxLength(15)
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/)
   readonly password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly confPassword: string;
 
   @IsString()
   @MinLength(3)

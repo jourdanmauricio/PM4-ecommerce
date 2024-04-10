@@ -1,12 +1,11 @@
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { UpdateUserDto } from './user.dto';
 import { v4 as uuid } from 'uuid';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     getUsers(): Promise<import("../entities/users.entity").Users[]>;
     getUserById(id: uuid): Promise<import("../entities/users.entity").Users>;
-    createUser(user: CreateUserDto): Promise<import("../entities/users.entity").Users>;
     updateUser(id: uuid, payload: UpdateUserDto): Promise<import("../entities/users.entity").Users>;
     deleteUser(id: uuid): Promise<import("../entities/users.entity").Users>;
 }

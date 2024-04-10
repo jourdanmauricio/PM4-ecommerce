@@ -30,7 +30,7 @@ __decorate([
 ], Users.prototype, "email", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
-    (0, typeorm_1.Column)({ type: 'varchar', length: 20 }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 150 }),
     __metadata("design:type", String)
 ], Users.prototype, "password", void 0);
 __decorate([

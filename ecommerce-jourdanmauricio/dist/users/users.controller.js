@@ -29,14 +29,6 @@ let UsersController = class UsersController {
     getUserById(id) {
         return this.usersService.findOne(id);
     }
-    createUser(user) {
-        try {
-            return this.usersService.create(user);
-        }
-        catch (err) {
-            throw new common_1.BadRequestException('Constrint PK');
-        }
-    }
     updateUser(id, payload) {
         return this.usersService.update(id, payload);
     }
@@ -60,13 +52,6 @@ __decorate([
     __metadata("design:paramtypes", [typeof (_a = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _a : Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getUserById", null);
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_dto_1.CreateUserDto]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "createUser", null);
 __decorate([
     (0, common_1.Put)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
