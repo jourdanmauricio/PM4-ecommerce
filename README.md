@@ -52,6 +52,7 @@ npm run migration:run
 delete from order_details_products;
 delete from products;
 delete from categories;
+delete from order_details;
 delete from orders;
 delete from users;
 
