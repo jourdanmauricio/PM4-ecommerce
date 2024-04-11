@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const bcrypt = require("bcrypt");
 const users_service_1 = require("../users/users.service");
 const jwt_1 = require("@nestjs/jwt");
+const roles_enum_1 = require("../models/roles.enum");
 let AuthService = class AuthService {
     constructor(usersService, jwtService) {
         this.usersService = usersService;
@@ -28,13 +29,12 @@ let AuthService = class AuthService {
             sub: user.id,
             id: user.id,
             email: user.email,
+            roles: [user.isAdmin ? roles_enum_1.Role.ADMIN : roles_enum_1.Role.USER],
         };
         const token = this.jwtService.sign(userPayload);
         return { user, token };
     }
     async signup(user) {
-        if (user.password !== user.confPassword)
-            throw new common_1.BadRequestException('Verifica tus contraseñas');
         try {
             const hashedPass = await bcrypt.hash(user.password, 10);
             if (!hashedPass)

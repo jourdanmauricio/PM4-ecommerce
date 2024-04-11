@@ -7,6 +7,7 @@ export declare class CreateUserDto {
     readonly phone: number;
     readonly country?: string;
     readonly city?: string;
+    isAdmin: boolean;
 }
 declare const UpdateUserDto_base: import("@nestjs/mapped-types").MappedType<Partial<CreateUserDto>>;
 export declare class UpdateUserDto extends UpdateUserDto_base {

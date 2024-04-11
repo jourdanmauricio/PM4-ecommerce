@@ -18,6 +18,7 @@ import { v4 as uuid } from 'uuid';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('files')
+@UseGuards(AuthGuard)
 export class FilesController {
   constructor(
     private readonly filesService: FilesService,
@@ -25,7 +26,6 @@ export class FilesController {
   ) {}
 
   @Put('uploadImage/:id')
-  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async uploadProductImage(
     @Param('id', ParseUUIDPipe) id: uuid,

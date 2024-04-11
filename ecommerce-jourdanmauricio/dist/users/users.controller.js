@@ -19,6 +19,9 @@ const users_service_1 = require("./users.service");
 const user_dto_1 = require("./user.dto");
 const auth_guard_1 = require("../guards/auth.guard");
 const uuid_1 = require("uuid");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const roles_enum_1 = require("../models/roles.enum");
+const roles_guard_1 = require("../guards/roles.guard");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -39,6 +42,11 @@ let UsersController = class UsersController {
 exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)(roles_enum_1.Role.ADMIN),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, common_1.SerializeOptions)({
+        groups: ['role:admin'],
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)

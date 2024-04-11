@@ -37,7 +37,6 @@ let FilesController = class FilesController {
 exports.FilesController = FilesController;
 __decorate([
     (0, common_1.Put)('uploadImage/:id'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image')),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
@@ -57,6 +56,7 @@ __decorate([
 ], FilesController.prototype, "uploadProductImage", null);
 exports.FilesController = FilesController = __decorate([
     (0, common_1.Controller)('files'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __metadata("design:paramtypes", [files_service_1.FilesService,
         products_service_1.ProductsService])
 ], FilesController);

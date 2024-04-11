@@ -50,6 +50,11 @@ __decorate([
     __metadata("design:type", String)
 ], Users.prototype, "city", void 0);
 __decorate([
+    (0, class_transformer_1.Expose)({ groups: ['role:admin'] }),
+    (0, typeorm_1.Column)({ name: 'is_admin', default: false }),
+    __metadata("design:type", Boolean)
+], Users.prototype, "isAdmin", void 0);
+__decorate([
     (0, class_transformer_1.Exclude)(),
     (0, typeorm_1.CreateDateColumn)({
         name: 'created_at',

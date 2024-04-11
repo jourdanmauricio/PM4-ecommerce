@@ -8,6 +8,7 @@ export declare class Users {
     country: string;
     address: string;
     city: string;
+    isAdmin: boolean;
     createdAt: Date;
     updatedAt: Date;
     orders: Orders[];

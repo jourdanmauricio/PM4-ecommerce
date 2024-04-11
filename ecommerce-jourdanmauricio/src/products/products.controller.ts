@@ -11,17 +11,13 @@ import {
   Put,
   Query,
   UseGuards,
-  // Permite ingresar información
-  // para el copntexto del endpoint
-  // que podremos acceder desde el guard
-  SetMetadata,
 } from '@nestjs/common';
 
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { v4 as uuid } from 'uuid';
-import { Public } from 'src/auth/public.decorator';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('products')
 // Protegemos el controler completo
@@ -46,7 +42,7 @@ export class ProductsController {
   }
 
   @Get(':id')
-  @SetMetadata('isPublic', true)
+  @Public()
   getProductById(@Param('id', ParseUUIDPipe) id: uuid) {
     return this.productsService.findOne(id);
   }

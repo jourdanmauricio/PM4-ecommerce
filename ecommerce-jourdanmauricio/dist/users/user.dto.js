@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoginUserDto = exports.UpdateUserDto = exports.CreateUserDto = void 0;
 const mapped_types_1 = require("@nestjs/mapped-types");
 const class_validator_1 = require("class-validator");
+const MatchPass_decorator_1 = require("../decorators/MatchPass.decorator");
 class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
@@ -38,6 +39,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.Validate)(MatchPass_decorator_1.MatchPass, ['password']),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "confPassword", void 0);
 __decorate([
@@ -66,6 +68,10 @@ __decorate([
     (0, class_validator_1.MaxLength)(20),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "city", void 0);
+__decorate([
+    (0, class_validator_1.IsEmpty)(),
+    __metadata("design:type", Boolean)
+], CreateUserDto.prototype, "isAdmin", void 0);
 class UpdateUserDto extends (0, mapped_types_1.PartialType)(CreateUserDto) {
 }
 exports.UpdateUserDto = UpdateUserDto;

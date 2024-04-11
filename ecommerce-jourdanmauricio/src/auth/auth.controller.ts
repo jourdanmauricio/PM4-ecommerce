@@ -2,15 +2,10 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from 'src/users/user.dto';
-// import { UsersService } from 'src/users/users.service';
-// import { LoginUserDto } from './auth.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    // private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Get()
   getAuths() {

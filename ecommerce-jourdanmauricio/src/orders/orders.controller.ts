@@ -11,7 +11,7 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './order.dto';
 import { v4 as uuid } from 'uuid';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { Public } from 'src/auth/public.decorator';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('orders')
 @UseGuards(AuthGuard)

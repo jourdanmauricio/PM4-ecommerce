@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { Orders } from 'src/entities/orders.entity';
 import {
   Entity,
@@ -35,6 +35,10 @@ export class Users {
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   city: string;
+
+  @Expose({ groups: ['role:admin'] })
+  @Column({ name: 'is_admin', default: false })
+  isAdmin: boolean;
 
   // timestamptz -> asigna zona horaria
   @Exclude()

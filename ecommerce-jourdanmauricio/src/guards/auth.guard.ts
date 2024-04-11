@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 // Reflector nos permite conocer la metadata
 // Se inyecta a través de inuección de dependencias
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from 'src/auth/public.decorator';
+import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -41,6 +41,7 @@ export class AuthGuard implements CanActivate {
       payload.exp = new Date(payload.exp * 1000);
 
       request.user = payload;
+      console.log('request.user', request.user);
       return true;
     } catch (err) {
       if (!token) throw new UnauthorizedException('Unauthorized');

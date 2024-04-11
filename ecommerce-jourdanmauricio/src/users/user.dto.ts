@@ -9,7 +9,10 @@ import {
   MinLength,
   MaxLength,
   Matches,
+  Validate,
+  IsEmpty,
 } from 'class-validator';
+import { MatchPass } from 'src/decorators/MatchPass.decorator';
 
 export class CreateUserDto {
   @IsString()
@@ -31,6 +34,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @Validate(MatchPass, ['password'])
   readonly confPassword: string;
 
   @IsString()
@@ -54,6 +58,9 @@ export class CreateUserDto {
   @MinLength(5)
   @MaxLength(20)
   readonly city?: string;
+
+  @IsEmpty()
+  isAdmin: boolean;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

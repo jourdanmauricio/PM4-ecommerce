@@ -5,6 +5,7 @@ import { UsersService } from 'src/users/users.service';
 import { LoginUserDto } from './auth.dto';
 import { CreateUserDto } from 'src/users/user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from 'src/models/roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +25,7 @@ export class AuthService {
       sub: user.id,
       id: user.id,
       email: user.email,
+      roles: [user.isAdmin ? Role.ADMIN : Role.USER],
     };
 
     const token = this.jwtService.sign(userPayload);
@@ -31,8 +33,6 @@ export class AuthService {
   }
 
   async signup(user: CreateUserDto) {
-    if (user.password !== user.confPassword)
-      throw new BadRequestException('Verifica tus contraseñas');
     try {
       const hashedPass = await bcrypt.hash(user.password, 10);
       if (!hashedPass)
