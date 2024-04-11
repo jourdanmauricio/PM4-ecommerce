@@ -19,6 +19,7 @@ const products_service_1 = require("./products.service");
 const product_dto_1 = require("./product.dto");
 const auth_guard_1 = require("../guards/auth.guard");
 const uuid_1 = require("uuid");
+const public_decorator_1 = require("../auth/public.decorator");
 let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;
@@ -45,6 +46,7 @@ let ProductsController = class ProductsController {
 exports.ProductsController = ProductsController;
 __decorate([
     (0, common_1.Get)(),
+    (0, public_decorator_1.Public)(),
     __param(0, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
     __param(1, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(5), common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -53,12 +55,14 @@ __decorate([
 ], ProductsController.prototype, "getProducts", null);
 __decorate([
     (0, common_1.Get)('seeder'),
+    (0, public_decorator_1.Public)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "addProducts", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, common_1.SetMetadata)('isPublic', true),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [typeof (_a = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _a : Object]),
@@ -66,7 +70,6 @@ __decorate([
 ], ProductsController.prototype, "getProductById", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [product_dto_1.CreateProductDto]),
@@ -74,7 +77,6 @@ __decorate([
 ], ProductsController.prototype, "createProduct", null);
 __decorate([
     (0, common_1.Put)(':id'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -83,7 +85,6 @@ __decorate([
 ], ProductsController.prototype, "updateProduct", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [typeof (_c = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _c : Object]),
@@ -91,6 +92,7 @@ __decorate([
 ], ProductsController.prototype, "deleteProduct", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __metadata("design:paramtypes", [products_service_1.ProductsService])
 ], ProductsController);
 //# sourceMappingURL=products.controller.js.map

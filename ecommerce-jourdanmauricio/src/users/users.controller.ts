@@ -15,23 +15,21 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { v4 as uuid } from 'uuid';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
   getUsers() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
   getUserById(@Param('id', ParseUUIDPipe) id: uuid) {
     return this.usersService.findOne(id);
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard)
   updateUser(
     @Param('id', ParseUUIDPipe) id: uuid,
     @Body() payload: UpdateUserDto,
@@ -40,7 +38,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
   deleteUser(@Param('id', ParseUUIDPipe) id: uuid) {
     return this.usersService.remove(id);
   }
