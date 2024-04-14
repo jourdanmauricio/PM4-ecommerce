@@ -15,9 +15,9 @@ import {
 
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from './../guards/auth.guard';
 import { v4 as uuid } from 'uuid';
-import { Public } from 'src/decorators/public.decorator';
+import { Public } from './../decorators/public.decorator';
 
 @Controller('products')
 // Protegemos el controler completo

@@ -1,6 +1,6 @@
 /// <reference types="multer" />
 import { FilesService } from './files.service';
-import { ProductsService } from 'src/products/products.service';
+import { ProductsService } from './../products/products.service';
 import { v4 as uuid } from 'uuid';
 export declare class FilesController {
     private readonly filesService;

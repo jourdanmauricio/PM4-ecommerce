@@ -10,7 +10,7 @@ import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Products } from '../entities/products.entity';
-import { Categories } from 'src/entities/categories.entity';
+import { Categories } from './../entities/categories.entity';
 
 @Injectable()
 export class ProductsService {
@@ -59,6 +59,12 @@ export class ProductsService {
   }
 
   async update(id: uuid, changes: UpdateProductDto) {
+    const category = await this.categoriesRepository.findOneBy({
+      id: changes.categoryId,
+    });
+
+    if (!category) throw new BadRequestException('Category not found');
+
     const product = await this.findOne(id);
     this.productsRepository.merge(product, changes);
     return this.productsRepository.save(product);

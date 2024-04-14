@@ -17,9 +17,9 @@ exports.ProductsController = void 0;
 const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
 const product_dto_1 = require("./product.dto");
-const auth_guard_1 = require("../guards/auth.guard");
+const auth_guard_1 = require("./../guards/auth.guard");
 const uuid_1 = require("uuid");
-const public_decorator_1 = require("../decorators/public.decorator");
+const public_decorator_1 = require("./../decorators/public.decorator");
 let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;

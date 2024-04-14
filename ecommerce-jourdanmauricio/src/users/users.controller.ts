@@ -9,14 +9,14 @@ import {
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
+import { v4 as uuid } from 'uuid';
 
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './user.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { v4 as uuid } from 'uuid';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/models/roles.enum';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { AuthGuard } from './../guards/auth.guard';
+import { Roles } from './../decorators/roles.decorator';
+import { Role } from './../models/roles.enum';
+import { RolesGuard } from './../guards/roles.guard';
 
 @Controller('users')
 @UseGuards(AuthGuard)

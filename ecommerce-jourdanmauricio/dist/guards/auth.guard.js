@@ -13,7 +13,7 @@ exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const core_1 = require("@nestjs/core");
-const public_decorator_1 = require("../decorators/public.decorator");
+const public_decorator_1 = require("./../decorators/public.decorator");
 let AuthGuard = class AuthGuard {
     constructor(jwtService, reflector) {
         this.jwtService = jwtService;
@@ -33,7 +33,6 @@ let AuthGuard = class AuthGuard {
             payload.iat = new Date(payload.iat * 1000);
             payload.exp = new Date(payload.exp * 1000);
             request.user = payload;
-            console.log('request.user', request.user);
             return true;
         }
         catch (err) {

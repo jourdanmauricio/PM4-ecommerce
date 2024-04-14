@@ -17,9 +17,9 @@ exports.FilesController = void 0;
 const common_1 = require("@nestjs/common");
 const files_service_1 = require("./files.service");
 const platform_express_1 = require("@nestjs/platform-express");
-const products_service_1 = require("../products/products.service");
+const products_service_1 = require("./../products/products.service");
 const uuid_1 = require("uuid");
-const auth_guard_1 = require("../guards/auth.guard");
+const auth_guard_1 = require("./../guards/auth.guard");
 let FilesController = class FilesController {
     constructor(filesService, productsService) {
         this.filesService = filesService;

@@ -15,13 +15,13 @@ var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
+const uuid_1 = require("uuid");
 const users_service_1 = require("./users.service");
 const user_dto_1 = require("./user.dto");
-const auth_guard_1 = require("../guards/auth.guard");
-const uuid_1 = require("uuid");
-const roles_decorator_1 = require("../decorators/roles.decorator");
-const roles_enum_1 = require("../models/roles.enum");
-const roles_guard_1 = require("../guards/roles.guard");
+const auth_guard_1 = require("./../guards/auth.guard");
+const roles_decorator_1 = require("./../decorators/roles.decorator");
+const roles_enum_1 = require("./../models/roles.enum");
+const roles_guard_1 = require("./../guards/roles.guard");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;

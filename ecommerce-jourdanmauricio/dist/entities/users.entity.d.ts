@@ -1,4 +1,4 @@
-import { Orders } from 'src/entities/orders.entity';
+import { Orders } from './orders.entity';
 export declare class Users {
     id: string;
     name: string;

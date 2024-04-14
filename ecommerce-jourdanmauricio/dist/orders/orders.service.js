@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const orders_entity_1 = require("../entities/orders.entity");
-const users_service_1 = require("../users/users.service");
-const products_service_1 = require("../products/products.service");
+const users_service_1 = require("./../users/users.service");
+const products_service_1 = require("./../products/products.service");
 const orderDetails_entity_1 = require("../entities/orderDetails.entity");
 let OrdersService = class OrdersService {
     constructor(ordersRepository, orderDetailsRepository, usersService, productsService, dataSource) {

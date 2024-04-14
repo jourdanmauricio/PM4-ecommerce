@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginUserDto = exports.UpdateUserDto = exports.CreateUserDto = void 0;
+exports.UpdateUserDto = exports.CreateUserDto = void 0;
 const mapped_types_1 = require("@nestjs/mapped-types");
 const class_validator_1 = require("class-validator");
-const MatchPass_decorator_1 = require("../decorators/MatchPass.decorator");
+const MatchPass_decorator_1 = require("./../decorators/MatchPass.decorator");
 class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
@@ -75,10 +75,4 @@ __decorate([
 class UpdateUserDto extends (0, mapped_types_1.PartialType)(CreateUserDto) {
 }
 exports.UpdateUserDto = UpdateUserDto;
-class LoginUserDto extends (0, mapped_types_1.PickType)(CreateUserDto, [
-    'email',
-    'password',
-]) {
-}
-exports.LoginUserDto = LoginUserDto;
 //# sourceMappingURL=user.dto.js.map

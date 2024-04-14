@@ -18,7 +18,7 @@ const initialData = require("./../data/initialData.json");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const products_entity_1 = require("../entities/products.entity");
-const categories_entity_1 = require("../entities/categories.entity");
+const categories_entity_1 = require("./../entities/categories.entity");
 let ProductsService = class ProductsService {
     constructor(productsRepository, categoriesRepository) {
         this.productsRepository = productsRepository;
@@ -57,6 +57,11 @@ let ProductsService = class ProductsService {
         return result;
     }
     async update(id, changes) {
+        const category = await this.categoriesRepository.findOneBy({
+            id: changes.categoryId,
+        });
+        if (!category)
+            throw new common_1.BadRequestException('Category not found');
         const product = await this.findOne(id);
         this.productsRepository.merge(product, changes);
         return this.productsRepository.save(product);

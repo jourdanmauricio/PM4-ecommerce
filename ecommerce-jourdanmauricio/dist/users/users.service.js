@@ -16,8 +16,8 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const bcrypt = require("bcrypt");
 const users_entity_1 = require("../entities/users.entity");
+const bcrypt = require("bcrypt");
 let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
@@ -39,31 +39,22 @@ let UsersService = class UsersService {
         const user = await this.usersRepository.findOneBy({ email });
         return user;
     }
-    create(user) {
+    async create(user) {
         const newUser = this.usersRepository.create(user);
-        const result = this.usersRepository.save(newUser).catch((err) => {
-            throw new common_1.BadRequestException(err.detail);
-        });
-        return result;
+        return await this.usersRepository.save(newUser);
     }
     async update(id, changes) {
         const user = await this.findOne(id);
-        this.usersRepository.merge(user, changes);
-        return this.usersRepository.save(user);
+        if (changes.password) {
+            const hashedPass = await bcrypt.hash(changes.password, 10);
+            changes = { ...changes, password: hashedPass };
+        }
+        const updUser = this.usersRepository.merge(user, changes);
+        return this.usersRepository.save(updUser);
     }
     async remove(id) {
         const user = await this.findOne(id);
         await this.usersRepository.delete(id);
-        return user;
-    }
-    async signin(credentials) {
-        const { email, password } = credentials;
-        const user = await this.findByEmail(email);
-        if (!user)
-            throw new common_1.UnauthorizedException('Credenciales inválidas');
-        const matchPass = await bcrypt.compare(password, user.password);
-        if (!matchPass)
-            throw new common_1.BadRequestException('Credenciales inválidas');
         return user;
     }
 };

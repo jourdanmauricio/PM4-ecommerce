@@ -12,7 +12,7 @@ const products_controller_1 = require("./products.controller");
 const products_service_1 = require("./products.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const products_entity_1 = require("../entities/products.entity");
-const categories_entity_1 = require("../entities/categories.entity");
+const categories_entity_1 = require("./../entities/categories.entity");
 let ProductsModule = class ProductsModule {
 };
 exports.ProductsModule = ProductsModule;

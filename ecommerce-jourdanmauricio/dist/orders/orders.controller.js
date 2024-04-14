@@ -18,8 +18,8 @@ const common_1 = require("@nestjs/common");
 const orders_service_1 = require("./orders.service");
 const order_dto_1 = require("./order.dto");
 const uuid_1 = require("uuid");
-const auth_guard_1 = require("../guards/auth.guard");
-const public_decorator_1 = require("../decorators/public.decorator");
+const auth_guard_1 = require("./../guards/auth.guard");
+const public_decorator_1 = require("./../decorators/public.decorator");
 let OrdersController = class OrdersController {
     constructor(ordersService) {
         this.ordersService = ordersService;

@@ -1,8 +1,8 @@
 import { DataSource, Repository } from 'typeorm';
 import { Orders } from '../entities/orders.entity';
 import { CreateOrderDto } from './order.dto';
-import { UsersService } from 'src/users/users.service';
-import { ProductsService } from 'src/products/products.service';
+import { UsersService } from './../users/users.service';
+import { ProductsService } from './../products/products.service';
 import { OrderDetails } from '../entities/orderDetails.entity';
 import { v4 as uuid } from 'uuid';
 export declare class OrdersService {

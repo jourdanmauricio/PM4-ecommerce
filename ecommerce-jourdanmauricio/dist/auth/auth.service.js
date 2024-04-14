@@ -12,19 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const bcrypt = require("bcrypt");
-const users_service_1 = require("../users/users.service");
+const users_service_1 = require("./../users/users.service");
 const jwt_1 = require("@nestjs/jwt");
-const roles_enum_1 = require("../models/roles.enum");
+const roles_enum_1 = require("./../models/roles.enum");
 let AuthService = class AuthService {
     constructor(usersService, jwtService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
-    getAuths() {
-        return 'Get all auths?';
-    }
     async signin(credentials) {
-        const user = await this.usersService.signin(credentials);
+        const { email, password } = credentials;
+        const user = await this.usersService.findByEmail(email);
+        if (!user)
+            throw new common_1.UnauthorizedException('Invalid credenttials');
+        const matchPass = await bcrypt.compare(password, user.password);
+        if (!matchPass)
+            throw new common_1.UnauthorizedException('Invalid credenttials');
         const userPayload = {
             sub: user.id,
             id: user.id,
@@ -35,6 +38,9 @@ let AuthService = class AuthService {
         return { user, token };
     }
     async signup(user) {
+        const dbUser = await this.usersService.findByEmail(user.email);
+        if (dbUser)
+            throw new common_1.BadRequestException('Email is already in use');
         try {
             const hashedPass = await bcrypt.hash(user.password, 10);
             if (!hashedPass)

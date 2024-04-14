@@ -1,5 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Orders } from 'src/entities/orders.entity';
+import { Orders } from './orders.entity';
 import {
   Entity,
   Column,

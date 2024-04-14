@@ -1,4 +1,4 @@
-import { PartialType, PickType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/mapped-types';
 
 import {
   IsString,
@@ -12,7 +12,7 @@ import {
   Validate,
   IsEmpty,
 } from 'class-validator';
-import { MatchPass } from 'src/decorators/MatchPass.decorator';
+import { MatchPass } from './../decorators/MatchPass.decorator';
 
 export class CreateUserDto {
   @IsString()
@@ -65,7 +65,4 @@ export class CreateUserDto {
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
-export class LoginUserDto extends PickType(CreateUserDto, [
-  'email',
-  'password',
-]) {}
+export type LoginUserDto = Pick<CreateUserDto, 'email' | 'password'>;

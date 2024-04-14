@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { Repository } from 'typeorm';
 import { Products } from '../entities/products.entity';
-import { Categories } from 'src/entities/categories.entity';
+import { Categories } from './../entities/categories.entity';
 export declare class ProductsService {
     private productsRepository;
     private categoriesRepository;

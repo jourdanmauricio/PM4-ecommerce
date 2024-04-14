@@ -1,5 +1,5 @@
-import { Categories } from 'src/entities/categories.entity';
-import { OrderDetails } from 'src/entities/orderDetails.entity';
+import { Categories } from './categories.entity';
+import { OrderDetails } from './orderDetails.entity';
 export declare class Products {
     id: string;
     name: string;

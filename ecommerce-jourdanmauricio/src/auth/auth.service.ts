@@ -1,11 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from './../users/users.service';
 import { LoginUserDto } from './auth.dto';
-import { CreateUserDto } from 'src/users/user.dto';
+import { CreateUserDto } from './../users/user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { Role } from 'src/models/roles.enum';
+import { Role } from './../models/roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -14,12 +18,15 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  getAuths() {
-    return 'Get all auths?';
-  }
-
   async signin(credentials: LoginUserDto) {
-    const user = await this.usersService.signin(credentials);
+    const { email, password } = credentials;
+
+    const user = await this.usersService.findByEmail(email);
+    if (!user) throw new UnauthorizedException('Invalid credenttials');
+
+    const matchPass = await bcrypt.compare(password, user.password);
+
+    if (!matchPass) throw new UnauthorizedException('Invalid credenttials');
 
     const userPayload = {
       sub: user.id,
@@ -33,6 +40,9 @@ export class AuthService {
   }
 
   async signup(user: CreateUserDto) {
+    const dbUser = await this.usersService.findByEmail(user.email);
+    if (dbUser) throw new BadRequestException('Email is already in use');
+
     try {
       const hashedPass = await bcrypt.hash(user.password, 10);
       if (!hashedPass)

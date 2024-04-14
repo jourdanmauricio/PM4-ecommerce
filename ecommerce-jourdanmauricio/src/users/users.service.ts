@@ -1,17 +1,11 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { Users } from '../entities/users.entity';
-import { LoginUserDto } from 'src/auth/auth.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -39,37 +33,24 @@ export class UsersService {
     return user;
   }
 
-  create(user: CreateUserDto): Promise<Users> {
+  async create(user: CreateUserDto): Promise<Users> {
     const newUser = this.usersRepository.create(user);
-
-    const result = this.usersRepository.save(newUser).catch((err: any) => {
-      throw new BadRequestException(err.detail);
-    });
-    return result;
+    return await this.usersRepository.save(newUser);
   }
 
   async update(id: uuid, changes: UpdateUserDto) {
     const user = await this.findOne(id);
-    this.usersRepository.merge(user, changes);
-    return this.usersRepository.save(user);
+    if (changes.password) {
+      const hashedPass = await bcrypt.hash(changes.password, 10);
+      changes = { ...changes, password: hashedPass };
+    }
+    const updUser = this.usersRepository.merge(user, changes);
+    return this.usersRepository.save(updUser);
   }
 
   async remove(id: number) {
     const user = await this.findOne(id);
     await this.usersRepository.delete(id);
-    return user;
-  }
-
-  async signin(credentials: LoginUserDto) {
-    const { email, password } = credentials;
-
-    const user = await this.findByEmail(email);
-    if (!user) throw new UnauthorizedException('Credenciales inválidas');
-
-    const matchPass = await bcrypt.compare(password, user.password);
-
-    if (!matchPass) throw new BadRequestException('Credenciales inválidas');
-
     return user;
   }
 }

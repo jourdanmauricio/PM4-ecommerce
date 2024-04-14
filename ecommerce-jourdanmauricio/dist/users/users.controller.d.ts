@@ -1,6 +1,6 @@
+import { v4 as uuid } from 'uuid';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './user.dto';
-import { v4 as uuid } from 'uuid';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
