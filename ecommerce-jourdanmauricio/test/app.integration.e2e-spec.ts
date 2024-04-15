@@ -5,37 +5,106 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import * as request from 'supertest';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import typeOrmConfig from '../src/config/typeormTest';
+// import { ConfigModule, ConfigService } from '@nestjs/config';
+// import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
+// import typeOrmConfig from './../src/config/typeorm';
 
 import { AppModule } from '../src/app.module';
-// import { AuthModule } from '../src/auth/auth.module';
+import { Users } from '../src/entities/users.entity';
+import { AuthModule } from '../src/auth/auth.module';
+// import { loggerGlobal } from './../src/middlewares/logger.middleware';
 import { Reflector } from '@nestjs/core';
 import { generateUser } from '../src/faker/user.fake';
-import { ConfigModule } from '@nestjs/config';
-import { AdminUserSeeder } from './adminUserSeeder';
-import { Users } from './../src/entities/users.entity';
+import { v4 as uuid } from 'uuid';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
+  const mockUsers = [
+    {
+      id: '7ef136e4-f80e-4077-818d-1ba72f750aed',
+      name: 'Mauricio Jourdan',
+      email: 'jourdanmau@mail.com',
+      password: '$2b$10$XH0t3k84pQiznk/b0EBA7.mlS6NePpzKeHguJp96zw00B.Wh6Lrse',
+      phone: '2214529298',
+      country: 'Argentina',
+      address: 'Av 7 nro 1532',
+      city: 'La Plata',
+      isAdmin: true,
+    },
+    {
+      id: 'c4ea2312-f839-4d0b-bb9d-379818fbe74c',
+      name: 'Paola Jourdan',
+      email: 'jourdanpao@mail.com',
+      password: '$2b$10$XH0t3k84pQiznk/b0EBA7.mlS6NePpzKeHguJp96zw00B.Wh6Lrse',
+      phone: '2214529298',
+      country: 'Argentina',
+      address: 'Av 7 nro 1532',
+      city: 'La Plata',
+      isAdmin: false,
+    },
+  ];
+
+  const mockUsersRepository = {
+    findOneBy: jest
+      .fn()
+      .mockImplementation((data) =>
+        mockUsers.find((el) => el.email === data.email),
+      ),
+    find: jest.fn().mockImplementation(() => mockUsers),
+    findOne: jest.fn().mockImplementation((data) =>
+      mockUsers.find((el) => {
+        return el.id === data.where.id;
+      }),
+    ),
+    create: jest.fn().mockImplementation((data) => {
+      delete data.confPassword;
+      return {
+        ...data,
+        isAdmin: false,
+        id: uuid(),
+      };
+    }),
+    save: jest.fn().mockImplementation((data) => {
+      mockUsers.push(data);
+      return data;
+    }),
+    merge: jest.fn().mockImplementation((user, changes) => {
+      const foundUser = mockUsers.find((el) => {
+        return el.id === user.id;
+      });
+      const index = mockUsers.findIndex((el) => el.id === user.id);
+      mockUsers[index] = {
+        ...foundUser,
+        ...changes,
+      };
+      return mockUsers[index];
+    }),
+    delete: jest.fn().mockImplementation((id) => {
+      const index = mockUsers.findIndex((item) => item.id === id);
+
+      mockUsers.splice(index, 1);
+
+      return { id };
+    }),
+  };
+
   let server = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          load: [typeOrmConfig],
-        }),
-        TypeOrmModule.forRootAsync({
-          inject: [ConfigService],
-          useFactory: (configService: ConfigService) =>
-            configService.get('typeormTest'),
-        }),
-        TypeOrmModule.forFeature([Users]),
-        // AuthModule,
+        // ConfigModule.forRoot({
+        //   isGlobal: true,
+        //   load: [typeOrmConfig],
+        // }),
+        // TypeOrmModule.forRootAsync({
+        //   inject: [ConfigService],
+        //   useFactory: (configService: ConfigService) =>
+        //     configService.get('typeorm'),
+        // }),
+        AuthModule,
         AppModule,
         JwtModule.register({
           global: true,
@@ -43,8 +112,10 @@ describe('AppController (e2e)', () => {
           secret: process.env.JWT_SECRET,
         }),
       ],
-      providers: [AdminUserSeeder],
-    }).compile();
+    })
+      .overrideProvider(getRepositoryToken(Users))
+      .useValue(mockUsersRepository)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalInterceptors(
@@ -56,18 +127,14 @@ describe('AppController (e2e)', () => {
         forbidNonWhitelisted: true,
       }),
     );
-    const seeder = app.get<AdminUserSeeder>(AdminUserSeeder);
-    await seeder.run();
-
     server = await app.init();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await server.close();
   });
 
   let adminAccessToken = null;
-  let user;
 
   describe('App', () => {
     it('/ (GET health)', async () => {
@@ -84,7 +151,6 @@ describe('AppController (e2e)', () => {
             .send({ email: 'jourdanmau@mail.com', password: 'Aa$12345678' });
 
           adminAccessToken = response.body.token;
-
           const statusCode = response.statusCode;
           expect(statusCode).toEqual(201);
           return response;
@@ -127,7 +193,6 @@ describe('AppController (e2e)', () => {
         });
       });
       describe('signup', () => {
-        // passwords no match
         it('signup(), Should create a new user and return that', async () => {
           const mockUser = generateUser();
           delete mockUser.id;
@@ -140,11 +205,9 @@ describe('AppController (e2e)', () => {
               confPassword: 'Aa$12345678',
             });
 
-          user = response.body;
-
           expect(response.statusCode).toBe(201);
           expect(response.body.name).toEqual(mockUser.name);
-          // expect(mockUsersRepository.create).toHaveBeenCalled();
+          expect(mockUsersRepository.create).toHaveBeenCalled();
         });
         it('signup(), Should return an error 400 (BadRequest)', async () => {
           const mockUser = generateUser();
@@ -224,8 +287,8 @@ describe('AppController (e2e)', () => {
               // console.log('******************************************');
               // console.log('All users:', response.body);
               // console.log('******************************************');
-              expect(response.body.length).toEqual(3);
-              // expect(response.body).toEqual(mockUsers);
+              expect(response.body.length).toEqual(mockUsers.length);
+              expect(response.body).toEqual(mockUsers);
             });
         });
       });
@@ -233,13 +296,13 @@ describe('AppController (e2e)', () => {
       describe('GET /:id', () => {
         it('findOne(id), Should return a user', async () => {
           return await request(app.getHttpServer())
-            .get(`/users/${user.id}`)
+            .get('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74c')
             .expect('Content-Type', /json/)
             .set({ Authorization: `Bearer ${adminAccessToken}` })
             .expect(200)
             .then((response) => {
               // console.log('response', response);
-              expect(response.body.email).toEqual(user.email);
+              expect(response.body.email).toEqual('jourdanpao@mail.com');
             });
         });
 
@@ -258,7 +321,7 @@ describe('AppController (e2e)', () => {
       describe('PUT /:id', () => {
         it('updateUser(), Should update a user', async () => {
           return await request(app.getHttpServer())
-            .put(`/users/${user.id}`)
+            .put('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74c')
             .send({ name: 'Paola Andrea Jourdán' })
             .set({ Authorization: `Bearer ${adminAccessToken}` })
             .expect('Content-Type', /json/)
@@ -309,13 +372,15 @@ describe('AppController (e2e)', () => {
       describe('DELETE /:id', () => {
         it('updateUser(), Should update a user', async () => {
           return await request(app.getHttpServer())
-            .delete(`/users/${user.id}`)
+            .delete('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74c')
             .set({ Authorization: `Bearer ${adminAccessToken}` })
             .expect('Content-Type', /json/)
             .expect(200)
             .then((response) => {
               // console.log('response', response.body);
-              expect(response.body.id).toEqual(user.id);
+              expect(response.body.id).toEqual(
+                'c4ea2312-f839-4d0b-bb9d-379818fbe74c',
+              );
             });
         });
         it('updateUser(), should return an error NotFoundException(User not found)', async () => {
