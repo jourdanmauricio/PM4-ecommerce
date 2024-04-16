@@ -11,23 +11,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
-const uuid_1 = require("uuid");
-const users_service_1 = require("./users.service");
-const user_dto_1 = require("./user.dto");
+const swagger_1 = require("@nestjs/swagger");
 const auth_guard_1 = require("./../guards/auth.guard");
+const roles_guard_1 = require("./../guards/roles.guard");
 const roles_decorator_1 = require("./../decorators/roles.decorator");
 const roles_enum_1 = require("./../models/roles.enum");
-const roles_guard_1 = require("./../guards/roles.guard");
+const users_service_1 = require("./users.service");
+const user_dto_1 = require("./user.dto");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    getUsers() {
-        return this.usersService.findAll();
+    getUsers(page, limit) {
+        return this.usersService.findAll(page, limit);
     }
     getUserById(id) {
         return this.usersService.findOne(id);
@@ -47,33 +47,41 @@ __decorate([
     (0, common_1.SerializeOptions)({
         groups: ['role:admin'],
     }),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(5), common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    openapi.ApiResponse({ status: 200, type: require("../entities/users.entity").Users }),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getUserById", null);
 __decorate([
     (0, common_1.Put)(':id'),
+    openapi.ApiResponse({ status: 200, type: require("../entities/users.entity").Users }),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _b : Object, user_dto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [String, user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "updateUser", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    openapi.ApiResponse({ status: 200, type: require("../entities/users.entity").Users }),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof uuid_1.v4 !== "undefined" && uuid_1.v4) === "function" ? _c : Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "deleteUser", null);
 exports.UsersController = UsersController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiTags)('Users'),
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __metadata("design:paramtypes", [users_service_1.UsersService])

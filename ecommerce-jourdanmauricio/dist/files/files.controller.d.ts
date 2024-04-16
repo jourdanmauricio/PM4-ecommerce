@@ -1,10 +1,11 @@
+/// <reference types="node" />
 /// <reference types="multer" />
-import { FilesService } from './files.service';
 import { ProductsService } from './../products/products.service';
-import { v4 as uuid } from 'uuid';
+import { FilesService } from './files.service';
+import { UUID } from 'crypto';
 export declare class FilesController {
     private readonly filesService;
     private productsService;
     constructor(filesService: FilesService, productsService: ProductsService);
-    uploadProductImage(id: uuid, file: Express.Multer.File): Promise<import("../entities/products.entity").Products>;
+    uploadProductImage(id: UUID, file: Express.Multer.File): Promise<import("../entities/products.entity").Products>;
 }

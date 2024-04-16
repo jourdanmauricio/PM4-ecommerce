@@ -20,6 +20,8 @@ const orders_module_1 = require("./orders/orders.module");
 const files_module_1 = require("./files/files.module");
 const typeorm_2 = require("./config/typeorm");
 const jwt_1 = require("@nestjs/jwt");
+const usersSeeder_1 = require("./data/usersSeeder");
+const users_entity_1 = require("./entities/users.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -34,6 +36,7 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
                 useFactory: (configService) => configService.get('typeorm'),
             }),
+            typeorm_1.TypeOrmModule.forFeature([users_entity_1.Users]),
             users_module_1.UsersModule,
             products_module_1.ProductsModule,
             auth_module_1.AuthModule,
@@ -47,7 +50,7 @@ exports.AppModule = AppModule = __decorate([
             }),
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, usersSeeder_1.AdminUserSeeder],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

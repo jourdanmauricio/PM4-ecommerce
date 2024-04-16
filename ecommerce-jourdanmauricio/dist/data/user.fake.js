@@ -8,6 +8,11 @@ const generateUser = () => {
         country = country.padStart(5, 'P');
     if (country.length > 20)
         country = country.substring(0, 20);
+    let city = faker_1.faker.location.city();
+    if (city.length < 6)
+        city = country.padStart(6, 'C');
+    if (city.length > 20)
+        city = country.substring(0, 20);
     return {
         id: faker_1.faker.string.uuid(),
         name: faker_1.faker.person.fullName(),

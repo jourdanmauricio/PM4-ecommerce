@@ -7,12 +7,16 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { AuthGuard } from './../guards/auth.guard';
+// import { Public } from './../decorators/public.decorator';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './order.dto';
-import { v4 as uuid } from 'uuid';
-import { AuthGuard } from './../guards/auth.guard';
-import { Public } from './../decorators/public.decorator';
+import { UUID } from 'crypto';
 
+@ApiBearerAuth()
+@ApiTags('Orders')
 @Controller('orders')
 @UseGuards(AuthGuard)
 export class OrdersController {
@@ -20,13 +24,13 @@ export class OrdersController {
 
   @Get()
   // Solo admin?
-  @Public()
+  // @Public()
   getOrders() {
     return this.ordersService.findAll();
   }
 
   @Get(':id')
-  getOrder(@Param('id', ParseUUIDPipe) id: uuid) {
+  getOrder(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.ordersService.findOne(id);
   }
 

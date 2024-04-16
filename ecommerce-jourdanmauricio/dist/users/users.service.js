@@ -22,9 +22,17 @@ let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
     }
-    async findAll() {
-        const users = await this.usersRepository.find();
-        return users;
+    async findAll(page, limit) {
+        const skip = (page - 1) * limit;
+        const [users, total] = await this.usersRepository.findAndCount({
+            skip: skip,
+            take: limit,
+        });
+        return {
+            page,
+            total,
+            users,
+        };
     }
     async findOne(id) {
         const user = await this.usersRepository.findOne({

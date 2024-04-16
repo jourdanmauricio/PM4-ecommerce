@@ -10,9 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateCategoryDto = exports.CreateCategoryDto = void 0;
+const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const mapped_types_1 = require("@nestjs/mapped-types");
 class CreateCategoryDto {
+    static _OPENAPI_METADATA_FACTORY() {
+        return { name: { required: true, type: () => String } };
+    }
 }
 exports.CreateCategoryDto = CreateCategoryDto;
 __decorate([
@@ -21,6 +25,9 @@ __decorate([
     __metadata("design:type", String)
 ], CreateCategoryDto.prototype, "name", void 0);
 class UpdateCategoryDto extends (0, mapped_types_1.PartialType)(CreateCategoryDto) {
+    static _OPENAPI_METADATA_FACTORY() {
+        return {};
+    }
 }
 exports.UpdateCategoryDto = UpdateCategoryDto;
 //# sourceMappingURL=categories.dto.js.map

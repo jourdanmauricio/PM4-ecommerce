@@ -11,12 +11,16 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ProductsService } from './../products/products.service';
-import { v4 as uuid } from 'uuid';
-import { AuthGuard } from './../guards/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { ProductsService } from './../products/products.service';
+import { FilesService } from './files.service';
+import { AuthGuard } from './../guards/auth.guard';
+import { UUID } from 'crypto';
+
+@ApiBearerAuth()
+@ApiTags('Files')
 @Controller('files')
 @UseGuards(AuthGuard)
 export class FilesController {
@@ -28,7 +32,7 @@ export class FilesController {
   @Put('uploadImage/:id')
   @UseInterceptors(FileInterceptor('image'))
   async uploadProductImage(
-    @Param('id', ParseUUIDPipe) id: uuid,
+    @Param('id', ParseUUIDPipe) id: UUID,
     @UploadedFile(
       new ParseFilePipe({
         validators: [

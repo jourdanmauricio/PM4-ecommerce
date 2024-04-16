@@ -12,13 +12,16 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+// import { v4 as uuid } from 'uuid';
 
+import { AuthGuard } from './../guards/auth.guard';
+import { Public } from './../decorators/public.decorator';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
-import { AuthGuard } from './../guards/auth.guard';
-import { v4 as uuid } from 'uuid';
-import { Public } from './../decorators/public.decorator';
+import { UUID } from 'crypto';
 
+@ApiTags('Products')
 @Controller('products')
 // Protegemos el controler completo
 // pero definimos dos endpoints como públicos
@@ -32,7 +35,7 @@ export class ProductsController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
   ) {
-    return this.productsService.findAll(Number(page), Number(limit));
+    return this.productsService.findAll(page, limit);
   }
 
   @Get('seeder')
@@ -43,25 +46,28 @@ export class ProductsController {
 
   @Get(':id')
   @Public()
-  getProductById(@Param('id', ParseUUIDPipe) id: uuid) {
+  getProductById(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.productsService.findOne(id);
   }
 
+  @ApiBearerAuth()
   @Post()
   createProduct(@Body() product: CreateProductDto) {
     return this.productsService.create(product);
   }
 
+  @ApiBearerAuth()
   @Put(':id')
   updateProduct(
-    @Param('id', ParseUUIDPipe) id: uuid,
+    @Param('id', ParseUUIDPipe) id: UUID,
     @Body() payload: UpdateProductDto,
   ) {
     return this.productsService.update(id, payload);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
-  deleteProduct(@Param('id', ParseUUIDPipe) id: uuid) {
+  deleteProduct(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.productsService.remove(id);
   }
 }

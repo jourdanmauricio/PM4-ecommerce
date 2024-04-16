@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { Users } from './../entities/users.entity';
 import { UsersService } from './users.service';
-import { generateUser, generateUsers } from './../faker/user.fake';
+import { generateUser, generateUsers } from '../data/user.fake';
 
 describe('UsersService', () => {
   let service: UsersService;

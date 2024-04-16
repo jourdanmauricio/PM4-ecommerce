@@ -6,7 +6,7 @@ import { ParseUUIDPipe } from '@nestjs/common';
 
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { generateUser, generateUsers } from './../faker/user.fake';
+import { generateUser, generateUsers } from '../data/user.fake';
 
 describe('UsersController', () => {
   let controller: UsersController;

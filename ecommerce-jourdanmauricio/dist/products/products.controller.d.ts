@@ -1,6 +1,7 @@
+/// <reference types="node" />
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './product.dto';
-import { v4 as uuid } from 'uuid';
+import { UUID } from 'crypto';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
@@ -12,8 +13,8 @@ export declare class ProductsController {
     addProducts(): Promise<{
         message: string;
     }>;
-    getProductById(id: uuid): Promise<import("../entities/products.entity").Products>;
+    getProductById(id: UUID): Promise<import("../entities/products.entity").Products>;
     createProduct(product: CreateProductDto): Promise<import("../entities/products.entity").Products>;
-    updateProduct(id: uuid, payload: UpdateProductDto): Promise<import("../entities/products.entity").Products>;
-    deleteProduct(id: uuid): Promise<import("../entities/products.entity").Products>;
+    updateProduct(id: UUID, payload: UpdateProductDto): Promise<import("../entities/products.entity").Products>;
+    deleteProduct(id: UUID): Promise<import("../entities/products.entity").Products>;
 }

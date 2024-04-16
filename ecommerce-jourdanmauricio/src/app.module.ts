@@ -12,6 +12,8 @@ import { OrdersModule } from './orders/orders.module';
 import { FilesModule } from './files/files.module';
 import typeOrmConfig from './config/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { AdminUserSeeder } from './data/usersSeeder';
+import { Users } from './entities/users.entity';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { JwtModule } from '@nestjs/jwt';
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
+    TypeOrmModule.forFeature([Users]),
     UsersModule,
     ProductsModule,
     AuthModule,
@@ -37,6 +40,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AdminUserSeeder],
 })
 export class AppModule {}

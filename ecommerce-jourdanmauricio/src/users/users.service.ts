@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { Users } from '../entities/users.entity';
 import * as bcrypt from 'bcrypt';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -14,9 +15,18 @@ export class UsersService {
     private usersRepository: Repository<Users>,
   ) {}
 
-  async findAll() {
-    const users = await this.usersRepository.find();
-    return users;
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+    const [users, total] = await this.usersRepository.findAndCount({
+      skip: skip,
+      take: limit,
+    });
+
+    return {
+      page,
+      total,
+      users,
+    };
   }
 
   async findOne(id: uuid): Promise<Users> {
@@ -48,7 +58,7 @@ export class UsersService {
     return this.usersRepository.save(updUser);
   }
 
-  async remove(id: number) {
+  async remove(id: UUID) {
     const user = await this.findOne(id);
     await this.usersRepository.delete(id);
     return user;

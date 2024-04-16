@@ -9,11 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateUserDto = exports.CreateUserDto = void 0;
-const mapped_types_1 = require("@nestjs/mapped-types");
+exports.LoginUserDto = exports.UpdateUserDto = exports.CreateUserDto = void 0;
+const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 const MatchPass_decorator_1 = require("./../decorators/MatchPass.decorator");
 class CreateUserDto {
+    static _OPENAPI_METADATA_FACTORY() {
+        return { name: { required: true, type: () => String, description: "El nombre del usuario debe tener como m\u00EDnimo 3 caracteres", example: "Paola", minLength: 3, maxLength: 50 }, email: { required: true, type: () => String, description: "El email del usuario debe ser un email v\u00E1lido", example: "jourdanpao@mail.com" }, password: { required: true, type: () => String, description: "No utlices informaci\u00F3n personal ni compartas tu contrase\u00F1a", example: "Aa$12345678", minLength: 8, maxLength: 15, pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/" }, confPassword: { required: true, type: () => String, description: "No utlices informaci\u00F3n personal ni compartas tu contrase\u00F1a", example: "Aa$12345678" }, address: { required: true, type: () => String, description: "Direcci\u00F3n: m\u00EDnimo 3, m\u00E1ximo 80 cracteres", minLength: 3, maxLength: 80 }, phone: { required: true, type: () => Number, description: "N\u00FAmero de tel\u00E9fono: Debe ser num\u00E9rico", example: 1145454545 }, country: { required: false, type: () => String, description: "Pa\u00EDs: m\u00EDnimo: 5, m\u00E1ximo: 20", example: "Argentina", minLength: 5, maxLength: 20 }, city: { required: false, type: () => String, description: "Ciudad: m\u00EDnimo: 5, m\u00E1ximo: 20", minLength: 5, maxLength: 20 }, isAdmin: { required: true, type: () => Boolean, description: "Administrador: No de debe enviar", example: false } };
+    }
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([
@@ -72,7 +76,24 @@ __decorate([
     (0, class_validator_1.IsEmpty)(),
     __metadata("design:type", Boolean)
 ], CreateUserDto.prototype, "isAdmin", void 0);
-class UpdateUserDto extends (0, mapped_types_1.PartialType)(CreateUserDto) {
+class UpdateUserDto extends (0, swagger_1.PartialType)(CreateUserDto) {
+    static _OPENAPI_METADATA_FACTORY() {
+        return {};
+    }
 }
 exports.UpdateUserDto = UpdateUserDto;
+class LoginUserDto {
+    static _OPENAPI_METADATA_FACTORY() {
+        return { email: { required: true, type: () => String, description: "El email del usuario debe ser un email v\u00E1lido", example: "jourdanpao@mail.com" }, password: { required: true, type: () => String, description: "No utlices informaci\u00F3n personal ni compartas tu contrase\u00F1a", example: "Aa$12345678" } };
+    }
+}
+exports.LoginUserDto = LoginUserDto;
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], LoginUserDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], LoginUserDto.prototype, "password", void 0);
 //# sourceMappingURL=user.dto.js.map

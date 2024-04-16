@@ -1,23 +1,29 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Put,
+  Query,
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { UsersService } from './users.service';
-import { UpdateUserDto } from './user.dto';
 import { AuthGuard } from './../guards/auth.guard';
+import { RolesGuard } from './../guards/roles.guard';
 import { Roles } from './../decorators/roles.decorator';
 import { Role } from './../models/roles.enum';
-import { RolesGuard } from './../guards/roles.guard';
+import { UsersService } from './users.service';
+import { UpdateUserDto } from './user.dto';
+import { UUID } from 'crypto';
 
+@ApiBearerAuth()
+@ApiTags('Users')
 @Controller('users')
 @UseGuards(AuthGuard)
 export class UsersController {
@@ -29,25 +35,28 @@ export class UsersController {
   @SerializeOptions({
     groups: ['role:admin'],
   })
-  getUsers() {
-    return this.usersService.findAll();
+  getUsers(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+  ) {
+    return this.usersService.findAll(page, limit);
   }
 
   @Get(':id')
-  getUserById(@Param('id', ParseUUIDPipe) id: uuid) {
+  getUserById(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.usersService.findOne(id);
   }
 
   @Put(':id')
   updateUser(
-    @Param('id', ParseUUIDPipe) id: uuid,
+    @Param('id', ParseUUIDPipe) id: UUID,
     @Body() payload: UpdateUserDto,
   ) {
     return this.usersService.update(id, payload);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id', ParseUUIDPipe) id: uuid) {
+  deleteUser(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.usersService.remove(id);
   }
 }

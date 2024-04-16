@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ClassSerializerInterceptor,
@@ -7,16 +8,11 @@ import {
 import * as request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-// import { ConfigModule, ConfigService } from '@nestjs/config';
-// import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-// import typeOrmConfig from './../src/config/typeorm';
-
 import { AppModule } from '../src/app.module';
 import { Users } from '../src/entities/users.entity';
 import { AuthModule } from '../src/auth/auth.module';
-// import { loggerGlobal } from './../src/middlewares/logger.middleware';
 import { Reflector } from '@nestjs/core';
-import { generateUser } from '../src/faker/user.fake';
+import { generateUser } from '../src/data/user.fake';
 import { v4 as uuid } from 'uuid';
 
 describe('AppController (e2e)', () => {
@@ -53,7 +49,7 @@ describe('AppController (e2e)', () => {
       .mockImplementation((data) =>
         mockUsers.find((el) => el.email === data.email),
       ),
-    find: jest.fn().mockImplementation(() => mockUsers),
+    findAndCount: jest.fn().mockImplementation((params) => [mockUsers, 2]),
     findOne: jest.fn().mockImplementation((data) =>
       mockUsers.find((el) => {
         return el.id === data.where.id;
@@ -279,7 +275,7 @@ describe('AppController (e2e)', () => {
       describe('GET / ', () => {
         it('findAll(), Should return a list of users', async () => {
           return await request(app.getHttpServer())
-            .get('/users')
+            .get('/users?page=1&limit=50')
             .expect('Content-Type', /json/)
             .set({ Authorization: `Bearer ${adminAccessToken}` })
             .expect(200)
@@ -287,8 +283,8 @@ describe('AppController (e2e)', () => {
               // console.log('******************************************');
               // console.log('All users:', response.body);
               // console.log('******************************************');
-              expect(response.body.length).toEqual(mockUsers.length);
-              expect(response.body).toEqual(mockUsers);
+              expect(response.body.users.length).toEqual(mockUsers.length);
+              expect(response.body.users).toEqual(mockUsers);
             });
         });
       });
