@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsUUID, IsArray, ArrayMinSize } from 'class-validator';
-import { v4 as uuid } from 'uuid';
+import { UUID } from 'crypto';
 
 export class CreateOrderDto {
   /**
@@ -8,7 +8,7 @@ export class CreateOrderDto {
    */
   @IsUUID()
   @IsNotEmpty()
-  userId: uuid;
+  userId: UUID;
 
   /**
    * Array de Ids de products
@@ -17,5 +17,5 @@ export class CreateOrderDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsNotEmpty()
-  products: { id: uuid }[];
+  products: { id: UUID }[];
 }

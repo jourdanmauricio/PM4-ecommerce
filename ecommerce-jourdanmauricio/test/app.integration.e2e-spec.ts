@@ -13,7 +13,7 @@ import { Users } from '../src/entities/users.entity';
 import { AuthModule } from '../src/auth/auth.module';
 import { Reflector } from '@nestjs/core';
 import { generateUser } from '../src/data/user.fake';
-import { v4 as uuid } from 'uuid';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -60,7 +60,7 @@ describe('AppController (e2e)', () => {
       return {
         ...data,
         isAdmin: false,
-        id: uuid(),
+        id: UUID,
       };
     }),
     save: jest.fn().mockImplementation((data) => {
@@ -366,7 +366,7 @@ describe('AppController (e2e)', () => {
       });
 
       describe('DELETE /:id', () => {
-        it('updateUser(), Should update a user', async () => {
+        it('delete(), Should delete a user', async () => {
           return await request(app.getHttpServer())
             .delete('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74c')
             .set({ Authorization: `Bearer ${adminAccessToken}` })
@@ -379,7 +379,7 @@ describe('AppController (e2e)', () => {
               );
             });
         });
-        it('updateUser(), should return an error NotFoundException(User not found)', async () => {
+        it('delete(), should return an error NotFoundException(User not found)', async () => {
           return await request(app.getHttpServer())
             .delete('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74f')
             .set({ Authorization: `Bearer ${adminAccessToken}` })

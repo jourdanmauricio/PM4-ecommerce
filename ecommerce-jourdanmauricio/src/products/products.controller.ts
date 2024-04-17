@@ -13,7 +13,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-// import { v4 as uuid } from 'uuid';
 
 import { AuthGuard } from './../guards/auth.guard';
 import { Public } from './../decorators/public.decorator';
