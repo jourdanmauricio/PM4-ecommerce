@@ -5,7 +5,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Users } from './../entities/users.entity';
 import { CreateUserDto } from './../users/user.dto';
-import { LoginUserDto } from './auth.dto';
+import { LoginUserDto } from './../users/user.dto';
 
 describe('AuthController', () => {
   let authController: AuthController;

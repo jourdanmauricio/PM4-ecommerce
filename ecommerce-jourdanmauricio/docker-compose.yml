@@ -17,5 +17,12 @@ services:
     env_file:
       - .env.development
 
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env.development
+    ports:
+      - '5050:80'
+
 volumes:
   pgdata:

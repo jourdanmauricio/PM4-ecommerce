@@ -7,6 +7,7 @@ import { ParseUUIDPipe } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { generateUser, generateUsers } from '../data/user.fake';
+import { UUID } from 'crypto';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -15,7 +16,7 @@ describe('UsersController', () => {
   const fakeUser = generateUser();
 
   const mockUsersService = {
-    findAll: jest.fn().mockImplementation(() => fakeUsers),
+    findAll: jest.fn().mockImplementation(() => ({ users: fakeUsers })),
     update: jest.fn((id, dto) => ({
       ...fakeUser,
       ...dto,
@@ -56,15 +57,15 @@ describe('UsersController', () => {
   });
 
   it('Should return a list of users', async () => {
-    const users = await controller.getUsers();
-    // console.log('Users', controller.getUsers());
-    expect(users.length).toEqual(fakeUsers.length);
-    expect(users).toEqual(fakeUsers);
+    const response = await controller.getUsers(1, 5);
+    // console.log('Users', response);
+    expect(response.users.length).toEqual(fakeUsers.length);
+    expect(response.users).toEqual(fakeUsers);
     expect(mockUsersService.findAll).toHaveBeenCalled();
   });
 
   it('Should return a user', async () => {
-    const user = await controller.getUserById(fakeUser.id);
+    const user = await controller.getUserById(fakeUser.id as UUID);
     // console.log('User', controller.getUserById(fakeUser.id);
 
     expect(user).toEqual(fakeUser);
@@ -73,7 +74,7 @@ describe('UsersController', () => {
 
   it('Should update a user', async () => {
     const dto = { name: 'Mauricio' };
-    const updUser = await controller.updateUser(fakeUser.id, dto);
+    const updUser = await controller.updateUser(fakeUser.id as UUID, dto);
     // console.log('update user', updUser);
     expect(updUser).toEqual({
       ...fakeUser,

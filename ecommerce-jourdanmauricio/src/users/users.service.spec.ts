@@ -12,7 +12,9 @@ describe('UsersService', () => {
   const fakeUsers = generateUsers(5);
 
   const mockUsersRepository = {
-    find: jest.fn().mockImplementation(() => fakeUsers),
+    findAndCount: jest.fn().mockImplementation((params) => {
+      return [fakeUsers, params.limit];
+    }),
     create: jest.fn().mockImplementation((dto) => dto),
     save: jest
       .fn()
@@ -50,11 +52,11 @@ describe('UsersService', () => {
 
   describe('User findAll', () => {
     it('Should return a list of users', async () => {
-      const users = await service.findAll();
+      const response = await service.findAll(1, 5);
       // console.log('Users', controller.getUsers());
-      expect(users.length).toEqual(fakeUsers.length);
-      expect(users).toEqual(fakeUsers);
-      expect(mockUsersRepository.find).toHaveBeenCalled();
+      expect(response.users.length).toEqual(fakeUsers.length);
+      expect(response.users).toEqual(fakeUsers);
+      expect(mockUsersRepository.findAndCount).toHaveBeenCalled();
     });
   });
 
