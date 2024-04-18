@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Orders } from '../entities/orders.entity';
@@ -32,6 +36,9 @@ export class OrdersService {
       where: { id },
       relations: ['orderDetail', 'orderDetail.products'],
     });
+
+    if (!order) throw new BadRequestException('Order not found');
+
     return order;
   }
 
