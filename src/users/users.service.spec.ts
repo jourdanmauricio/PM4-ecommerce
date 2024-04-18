@@ -6,46 +6,44 @@ import { Users } from './../entities/users.entity';
 import { UsersService } from './users.service';
 import { generateUser, generateUsers } from '../data/user.fake';
 
+let service: UsersService;
+
+const fakeUsers = generateUsers(5);
+
+const mockUsersRepository = {
+  findAndCount: jest.fn().mockImplementation((params) => {
+    return [fakeUsers, params.limit];
+  }),
+  create: jest.fn().mockImplementation((dto) => dto),
+  save: jest
+    .fn()
+    .mockImplementation((user) => Promise.resolve({ id: Date.now(), ...user })),
+  findOne: jest.fn((id) => fakeUsers[0]),
+  findOneBy: jest.fn((email) => fakeUsers[0]),
+  merge: jest.fn((id, dto) => {
+    return {
+      ...fakeUsers[0],
+      ...dto,
+    };
+  }),
+  delete: jest.fn((id, dto) => fakeUsers[0]),
+};
+
+beforeEach(async () => {
+  const module: TestingModule = await Test.createTestingModule({
+    providers: [
+      UsersService,
+      {
+        provide: getRepositoryToken(Users),
+        useValue: mockUsersRepository,
+      },
+    ],
+  }).compile();
+
+  service = module.get<UsersService>(UsersService);
+});
+
 describe('UsersService', () => {
-  let service: UsersService;
-
-  const fakeUsers = generateUsers(5);
-
-  const mockUsersRepository = {
-    findAndCount: jest.fn().mockImplementation((params) => {
-      return [fakeUsers, params.limit];
-    }),
-    create: jest.fn().mockImplementation((dto) => dto),
-    save: jest
-      .fn()
-      .mockImplementation((user) =>
-        Promise.resolve({ id: Date.now(), ...user }),
-      ),
-    findOne: jest.fn((id) => fakeUsers[0]),
-    findOneBy: jest.fn((email) => fakeUsers[0]),
-    merge: jest.fn((id, dto) => {
-      return {
-        ...fakeUsers[0],
-        ...dto,
-      };
-    }),
-    delete: jest.fn((id, dto) => fakeUsers[0]),
-  };
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersService,
-        {
-          provide: getRepositoryToken(Users),
-          useValue: mockUsersRepository,
-        },
-      ],
-    }).compile();
-
-    service = module.get<UsersService>(UsersService);
-  });
-
   it('Should be defined', () => {
     expect(service).toBeDefined();
   });

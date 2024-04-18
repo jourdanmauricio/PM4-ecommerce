@@ -9,11 +9,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import typeOrmConfig from '../../src/config/typeormTest';
+import { ConfigModule } from '@nestjs/config';
+import { Reflector } from '@nestjs/core';
 
 import { AppModule } from '../../src/app.module';
-import { Reflector } from '@nestjs/core';
 import { generateUser } from '../../src/data/user.fake';
-import { ConfigModule } from '@nestjs/config';
 import { AdminUserSeeder } from '../../src/data/usersSeeder';
 import { Users } from '../../src/entities/users.entity';
 

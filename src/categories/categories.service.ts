@@ -11,12 +11,12 @@ export class CategoriesService {
     private categoriesRepository: Repository<Categories>,
   ) {}
 
-  async getCategories() {
+  async getAllCategories() {
     return await this.categoriesRepository.find();
   }
 
   async preLoadCategories() {
-    initialData.map(async (el) => {
+    const arrPromises = initialData.map(async (el) => {
       await this.categoriesRepository
         .createQueryBuilder()
         .insert()
@@ -25,6 +25,8 @@ export class CategoriesService {
         .orIgnore(`("name") DO NOTHING`)
         .execute();
     });
+
+    await Promise.all(arrPromises);
 
     return { message: 'Categories added' };
   }
