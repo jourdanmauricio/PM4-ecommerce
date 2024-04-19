@@ -124,6 +124,22 @@ describe('ProductsService', () => {
         ...dto,
       });
     });
+
+    it('Should return an error, Category not found', async () => {
+      mockProductsRepository.findOne = jest.fn((id) => fakeProducts[0]);
+
+      mockCategoriesRepository.findOneBy = jest
+        .fn()
+        .mockImplementation((id) => undefined);
+
+      const dto = { name: 'Product 1' };
+      try {
+        const updProduct = await service.update(fakeProducts[0].id, dto);
+        console.log('updProduct', updProduct);
+      } catch (err) {
+        expect(err.message).toEqual('Category not found');
+      }
+    });
   });
 
   describe('Product remove()', () => {
