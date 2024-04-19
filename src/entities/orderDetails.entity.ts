@@ -25,7 +25,9 @@ export class OrderDetails {
   // order_id: Relación 1:1 con orders.
   // Para que funcione la relación bidireccional debemos
   // especificar contra que campo se resuelve la referencia
-  @OneToOne(() => Orders, (order) => order.orderDetail)
+  @OneToOne(() => Orders, (order) => order.orderDetail, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'order_id' })
   order: Orders;
 

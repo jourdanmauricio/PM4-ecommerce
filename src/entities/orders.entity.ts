@@ -38,7 +38,9 @@ export class Orders {
   updatedAt: Date;
 
   // user_id: (Relación 1:N) con users.
-  @ManyToOne(() => Users, (user) => user.orders)
+  @ManyToOne(() => Users, (user) => user.orders, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: Users;
 

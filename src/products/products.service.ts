@@ -72,8 +72,12 @@ export class ProductsService {
 
   async remove(id: uuid) {
     const product = await this.findOne(id);
-    await this.productsRepository.delete(id);
-    return product;
+    try {
+      await this.productsRepository.delete(id);
+      return product;
+    } catch (error) {
+      throw new BadRequestException('El producto posee relaciones con ordenes');
+    }
   }
 
   async preLoadProducts() {
