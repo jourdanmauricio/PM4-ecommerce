@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker';
+import { UUID } from 'crypto';
 
 export const generateCategory = () => {
   return {
-    id: faker.string.uuid(),
+    id: faker.string.uuid() as UUID,
     name: faker.commerce.department(),
   };
 };

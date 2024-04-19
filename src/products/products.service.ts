@@ -66,8 +66,8 @@ export class ProductsService {
     if (!category) throw new BadRequestException('Category not found');
 
     const product = await this.findOne(id);
-    this.productsRepository.merge(product, changes);
-    return this.productsRepository.save(product);
+    const updProduct = this.productsRepository.merge(product, changes);
+    return this.productsRepository.save(updProduct);
   }
 
   async remove(id: uuid) {
