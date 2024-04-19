@@ -12,12 +12,16 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from './../guards/auth.guard';
 import { Public } from './../decorators/public.decorator';
 import { ProductsService } from './products.service';
-import { CreateProductDto, UpdateProductDto } from './product.dto';
+import {
+  CreateProductDto,
+  // FilterProductDto,
+  UpdateProductDto,
+} from './product.dto';
 import { UUID } from 'crypto';
 
 @ApiTags('Products')
@@ -30,6 +34,18 @@ export class ProductsController {
 
   @Get()
   @Public()
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Número de página',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Número máximo de productos a retornar',
+  })
   getProducts(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,

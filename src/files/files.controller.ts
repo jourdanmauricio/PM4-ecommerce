@@ -30,7 +30,7 @@ export class FilesController {
   ) {}
 
   @Put('uploadImage/:id')
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('image', { limits: { files: 1 } }))
   async uploadProductImage(
     @Param('id', ParseUUIDPipe) id: UUID,
     @UploadedFile(

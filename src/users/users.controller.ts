@@ -12,7 +12,7 @@ import {
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from './../guards/auth.guard';
 import { RolesGuard } from './../guards/roles.guard';
@@ -34,6 +34,18 @@ export class UsersController {
   @UseGuards(RolesGuard)
   @SerializeOptions({
     groups: ['role:admin'],
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Número de página',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Número máximo de usuarios a retornar',
   })
   getUsers(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,

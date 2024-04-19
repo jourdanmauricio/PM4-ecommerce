@@ -43,8 +43,6 @@ export class OrdersService {
   }
 
   async create(order: CreateOrderDto) {
-    // Buscar user
-
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
@@ -57,7 +55,6 @@ export class OrdersService {
 
       let price = 0;
       const products = [];
-      // buscar productos
       for await (const prodId of order.products) {
         const product = await this.productsService.findOne(prodId.id);
         if (product.stock < 1)
