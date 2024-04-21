@@ -21,9 +21,9 @@ export class UsersService {
       skip: skip,
       take: limit,
     });
-
     return {
       page,
+      limit,
       total,
       users,
     };

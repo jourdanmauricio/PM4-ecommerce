@@ -27,7 +27,7 @@ export class ProductsService {
       skip: skip,
       take: limit,
     });
-    return { page, total, products };
+    return { page, limit, total, products };
   }
 
   async findOne(id: uuid): Promise<Products> {
@@ -70,6 +70,9 @@ export class ProductsService {
     if (!category) throw new BadRequestException('Category not found');
 
     const product = await this.findOne(id);
+
+    product.category = category;
+
     const updProduct = this.productsRepository.merge(product, changes);
     return this.productsRepository.save(updProduct);
   }
