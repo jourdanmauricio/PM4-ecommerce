@@ -10,7 +10,7 @@ import {
   Validate,
   IsEmpty,
 } from 'class-validator';
-import { PartialType } from '@nestjs/swagger';
+import { ApiHideProperty, PartialType } from '@nestjs/swagger';
 
 import { MatchPass } from './../decorators/MatchPass.decorator';
 
@@ -96,6 +96,7 @@ export class CreateUserDto {
    * @example false
    */
   @IsEmpty()
+  @ApiHideProperty()
   isAdmin: boolean;
 }
 

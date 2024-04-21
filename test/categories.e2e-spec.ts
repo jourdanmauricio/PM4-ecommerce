@@ -3,11 +3,17 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import typeOrmConfig from '../../src/config/typeormTest';
 import { ConfigModule } from '@nestjs/config';
 
-import { AppModule } from '../../src/app.module';
-import { Users } from '../../src/entities/users.entity';
+import typeOrmConfig from '../src/config/typeormTest';
+
+// import { AppModule } from '../src/app.module';
+import { Users } from '../src/entities/users.entity';
+import { CategoriesModule } from '../src/categories/categories.module';
+import { Categories } from '../src/entities/categories.entity';
+import { Products } from '../src/entities/products.entity';
+import { OrderDetails } from '../src/entities/orderDetails.entity';
+import { Orders } from '../src/entities/orders.entity';
 
 //////////////////
 // #region APP
@@ -28,8 +34,15 @@ beforeAll(async () => {
         useFactory: (configService: ConfigService) =>
           configService.get('typeormTest'),
       }),
-      TypeOrmModule.forFeature([Users]),
-      AppModule,
+      TypeOrmModule.forFeature([
+        Users,
+        Categories,
+        Products,
+        OrderDetails,
+        Orders,
+      ]),
+      // AppModule,
+      CategoriesModule,
     ],
   }).compile();
 

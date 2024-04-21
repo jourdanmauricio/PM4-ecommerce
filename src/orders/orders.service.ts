@@ -57,6 +57,7 @@ export class OrdersService {
       const products = [];
       for await (const prodId of order.products) {
         const product = await this.productsService.findOne(prodId.id);
+
         if (product.stock < 1)
           throw new ConflictException(
             `Opps. The product is currently out of stock: ${product.name}`,

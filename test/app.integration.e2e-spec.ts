@@ -91,15 +91,6 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        // ConfigModule.forRoot({
-        //   isGlobal: true,
-        //   load: [typeOrmConfig],
-        // }),
-        // TypeOrmModule.forRootAsync({
-        //   inject: [ConfigService],
-        //   useFactory: (configService: ConfigService) =>
-        //     configService.get('typeorm'),
-        // }),
         AuthModule,
         AppModule,
         JwtModule.register({

@@ -7,7 +7,7 @@ export const generateProduct = () => {
     name: faker.commerce.department(),
     description: faker.commerce.productDescription(),
     price: parseFloat(faker.commerce.price({ min: 100 })),
-    stock: faker.number.int(),
+    stock: faker.number.int({ min: 2, max: 99999 }),
     imgUrl: faker.image.url(),
     categoryId: generateCategory().id,
   };

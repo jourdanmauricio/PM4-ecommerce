@@ -31,10 +31,14 @@ export class ProductsService {
   }
 
   async findOne(id: uuid): Promise<Products> {
+    if (!id || id.length === 0)
+      throw new NotFoundException('Product not found');
+
     const product = await this.productsRepository.findOne({
       where: { id },
       relations: ['category'],
     });
+
     if (!product) throw new NotFoundException('Product not found');
     return product;
   }

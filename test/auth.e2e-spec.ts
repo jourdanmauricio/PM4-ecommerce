@@ -8,14 +8,18 @@ import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import typeOrmConfig from '../../src/config/typeormTest';
+import typeOrmConfig from '../src/config/typeormTest';
 
-import { AppModule } from '../../src/app.module';
+// import { AppModule } from '../src/app.module';
 import { Reflector } from '@nestjs/core';
-import { generateUser } from '../../src/data/user.fake';
+import { generateUser } from '../src/data/user.fake';
 import { ConfigModule } from '@nestjs/config';
-import { AdminUserSeeder } from '../../src/data/usersSeeder';
-import { Users } from '../../src/entities/users.entity';
+import { AdminUserSeeder } from '../src/data/usersSeeder';
+import { Users } from '../src/entities/users.entity';
+import { AuthModule } from '../src/auth/auth.module';
+import { OrderDetails } from '../src/entities/orderDetails.entity';
+import { Products } from '../src/entities/products.entity';
+import { Categories } from '../src/entities/categories.entity';
 
 //////////////////
 // #region APP
@@ -25,52 +29,63 @@ let app: INestApplication;
 let server = null;
 let adminAccessToken = null;
 
-beforeAll(async () => {
-  const moduleFixture: TestingModule = await Test.createTestingModule({
-    imports: [
-      ConfigModule.forRoot({
-        isGlobal: true,
-        load: [typeOrmConfig],
-      }),
-      TypeOrmModule.forRootAsync({
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService) =>
-          configService.get('typeormTest'),
-      }),
-      TypeOrmModule.forFeature([Users]),
-      AppModule,
-      JwtModule.register({
-        global: true,
-        signOptions: { expiresIn: '1h' },
-        secret: process.env.JWT_SECRET,
-      }),
-    ],
-    providers: [AdminUserSeeder],
-  }).compile();
-
-  app = moduleFixture.createNestApplication();
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
-
-  // Seeder users
-  const seeder = app.get<AdminUserSeeder>(AdminUserSeeder);
-  await seeder.runAdmin();
-  // await seeder.runCustomers();
-  await seeder.runTestCustomer();
-
-  server = await app.init();
-});
-
-afterAll(async () => {
-  await server.close();
-});
-
 describe('Auth', () => {
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [typeOrmConfig],
+        }),
+        TypeOrmModule.forRootAsync({
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
+            configService.get('typeormTest'),
+        }),
+        //TypeOrmModule.forFeature([Users]),
+        // AppModule,
+        TypeOrmModule.forFeature([
+          Users,
+          Categories,
+          Products,
+          OrderDetails,
+          //Orders,
+        ]),
+        AuthModule,
+
+        JwtModule.register({
+          global: true,
+          signOptions: { expiresIn: '1h' },
+          secret: process.env.JWT_SECRET,
+        }),
+      ],
+      providers: [AdminUserSeeder],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    app.useGlobalInterceptors(
+      new ClassSerializerInterceptor(app.get(Reflector)),
+    );
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    );
+
+    // Seeder users
+    const seeder = app.get<AdminUserSeeder>(AdminUserSeeder);
+    await seeder.runAdmin();
+    await seeder.runCustomers();
+    await seeder.runTestCustomer();
+
+    server = await app.init();
+  });
+
+  afterAll(async () => {
+    await server.close();
+  });
+
   //////////////////////////
   // #region AUTH - SIGNIN
   //////////////////////////
