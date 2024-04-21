@@ -14,7 +14,7 @@ import { Reflector } from '@nestjs/core';
 
 //import { AppModule } from '../src/app.module';
 import { generateUser } from '../src/data/user.fake';
-import { AdminUserSeeder } from '../src/data/usersSeeder';
+import { UserSeeder } from '../src/data/usersSeeder';
 import { Users } from '../src/entities/users.entity';
 import { Categories } from '../src/entities/categories.entity';
 import { Products } from '../src/entities/products.entity';
@@ -60,7 +60,7 @@ beforeAll(async () => {
         secret: process.env.JWT_SECRET,
       }),
     ],
-    providers: [AdminUserSeeder],
+    providers: [UserSeeder],
   }).compile();
 
   app = moduleFixture.createNestApplication();
@@ -73,7 +73,7 @@ beforeAll(async () => {
   );
 
   // Seeder users
-  const seeder = app.get<AdminUserSeeder>(AdminUserSeeder);
+  const seeder = app.get<UserSeeder>(UserSeeder);
   await seeder.runAdmin();
   await seeder.runCustomers();
   await seeder.runTestCustomer();

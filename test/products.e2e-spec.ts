@@ -19,7 +19,7 @@ import { Products } from '../src/entities/products.entity';
 import { OrderDetails } from '../src/entities/orderDetails.entity';
 import { Orders } from '../src/entities/orders.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { AdminUserSeeder } from '../src/data/usersSeeder';
+import { UserSeeder } from '../src/data/usersSeeder';
 import { CategoriesModule } from '../src/categories/categories.module';
 import { generateUser } from '../src/data/user.fake';
 import { generateProduct } from '../src/data/product.fake';
@@ -66,7 +66,7 @@ beforeAll(async () => {
         secret: process.env.JWT_SECRET,
       }),
     ],
-    providers: [AdminUserSeeder],
+    providers: [UserSeeder],
   }).compile();
 
   app = moduleFixture.createNestApplication();
@@ -81,7 +81,7 @@ beforeAll(async () => {
 
   server = await app.init();
   // Seeder users
-  const seeder = app.get<AdminUserSeeder>(AdminUserSeeder);
+  const seeder = app.get<UserSeeder>(UserSeeder);
   await seeder.runAdmin();
   await seeder.runCustomers();
   await seeder.runTestCustomer();

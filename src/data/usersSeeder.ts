@@ -7,7 +7,7 @@ import { generateUsers } from './user.fake';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class AdminUserSeeder {
+export class UserSeeder {
   constructor(
     @InjectRepository(Users)
     private readonly userRepository: Repository<Users>,

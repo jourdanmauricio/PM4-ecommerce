@@ -14,7 +14,7 @@ import typeOrmConfig from '../src/config/typeormTest';
 import { Reflector } from '@nestjs/core';
 import { generateUser } from '../src/data/user.fake';
 import { ConfigModule } from '@nestjs/config';
-import { AdminUserSeeder } from '../src/data/usersSeeder';
+import { UserSeeder } from '../src/data/usersSeeder';
 import { Users } from '../src/entities/users.entity';
 import { AuthModule } from '../src/auth/auth.module';
 import { OrderDetails } from '../src/entities/orderDetails.entity';
@@ -59,7 +59,7 @@ describe('Auth', () => {
           secret: process.env.JWT_SECRET,
         }),
       ],
-      providers: [AdminUserSeeder],
+      providers: [UserSeeder],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -74,7 +74,7 @@ describe('Auth', () => {
     );
 
     // Seeder users
-    const seeder = app.get<AdminUserSeeder>(AdminUserSeeder);
+    const seeder = app.get<UserSeeder>(UserSeeder);
     await seeder.runAdmin();
     await seeder.runCustomers();
     await seeder.runTestCustomer();

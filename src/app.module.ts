@@ -12,7 +12,7 @@ import { OrdersModule } from './orders/orders.module';
 import { FilesModule } from './files/files.module';
 import typeOrmConfig from './config/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { AdminUserSeeder } from './data/usersSeeder';
+import { UserSeeder } from './data/usersSeeder';
 import { Users } from './entities/users.entity';
 
 @Module({
@@ -26,13 +26,13 @@ import { Users } from './entities/users.entity';
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
+    CategoriesModule,
     TypeOrmModule.forFeature([Users]),
     UsersModule,
-    ProductsModule,
     AuthModule,
-    CategoriesModule,
     OrdersModule,
     FilesModule,
+    ProductsModule,
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },
@@ -40,6 +40,6 @@ import { Users } from './entities/users.entity';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, AdminUserSeeder],
+  providers: [AppService, UserSeeder],
 })
 export class AppModule {}

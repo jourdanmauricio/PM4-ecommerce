@@ -1,9 +1,11 @@
+import { CategoriesService } from './categories/categories.service';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { loggerGlobal } from './middlewares/logger.middleware';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AdminUserSeeder } from './data/usersSeeder';
+import { UserSeeder } from './data/usersSeeder';
+import { ProductsService } from './products/products.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,11 +36,21 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  const seeder = app.get<AdminUserSeeder>(AdminUserSeeder);
-  await seeder.runAdmin();
-  await seeder.runCustomers();
-  await seeder.runTestCustomer();
+  console.log('Users Seeders');
+  const userSeeders = app.get<UserSeeder>(UserSeeder);
+  await userSeeders.runAdmin();
+  await userSeeders.runCustomers();
+  await userSeeders.runTestCustomer();
 
-  await app.listen(3000);
+  console.log('Categories Seeders');
+  const categoriesSeeder = app.get<CategoriesService>(CategoriesService);
+  await categoriesSeeder.preLoadCategories();
+
+  console.log('Products Seeders');
+  const productsSeeder = app.get<ProductsService>(ProductsService);
+  await productsSeeder.preLoadProducts();
+
+  await app.listen(process.env.PORT);
+  console.log(`Server listen on ${process.env.HOST}:${process.env.PORT}`);
 }
 bootstrap();
