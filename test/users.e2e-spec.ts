@@ -73,10 +73,10 @@ beforeAll(async () => {
   );
 
   // Seeder users
-  const seeder = app.get<UserSeeder>(UserSeeder);
-  await seeder.runAdmin();
-  await seeder.runCustomers();
-  await seeder.runTestCustomer();
+  const userSeeder = app.get<UserSeeder>(UserSeeder);
+  await userSeeder.runAdmin();
+  await userSeeder.runCustomers();
+  await userSeeder.runTestCustomer();
 
   server = await app.init();
 
@@ -110,7 +110,7 @@ describe('Users', () => {
   // #region USERS - GET
   ///////////////////////
   describe('GET / ', () => {
-    it('findAll(), Should return a list of users', async () => {
+    it('Should return a list of users', async () => {
       return await request(app.getHttpServer())
         .get('/users?page=1&limit=30')
         .expect('Content-Type', /json/)
@@ -126,7 +126,7 @@ describe('Users', () => {
   });
 
   describe('GET / ', () => {
-    it('findAll(), Should return an error 403, Forbidden resource', async () => {
+    it('Should return an error 403, Forbidden (Forbidden resource)', async () => {
       return await request(app.getHttpServer())
         .get('/users?page=1&limit=30')
         .set({ Authorization: `Bearer ${user.token}` })
@@ -139,7 +139,7 @@ describe('Users', () => {
   });
 
   describe('GET /:id', () => {
-    it('findOne(id), Should return a user', async () => {
+    it('Should return a user', async () => {
       return await request(app.getHttpServer())
         .get(`/users/${user.id}`)
         .expect('Content-Type', /json/)
@@ -151,7 +151,7 @@ describe('Users', () => {
         });
     });
 
-    it('findOne(id), Should return an error 400 (Bad Request), Validation failed (uuid is expected)', async () => {
+    it('Should return an error 400, Bad Request (Validation failed (uuid is expected))', async () => {
       return await request(app.getHttpServer())
         .get(`/users/aaaaa`)
         .expect('Content-Type', /json/)
@@ -163,7 +163,7 @@ describe('Users', () => {
         });
     });
 
-    it('findOne(id), Should return an error 401, Unauthorized', async () => {
+    it('Should return an error 401, Unauthorized (Unauthorized)', async () => {
       return await request(app.getHttpServer())
         .get(`/users/${user.id}`)
         .expect('Content-Type', /json/)
@@ -179,7 +179,7 @@ describe('Users', () => {
         });
     });
 
-    it('findOne(id), should return an error NotFoundException(User not found)', async () => {
+    it('Should return an error 404, Not Found (User not found)', async () => {
       return await request(app.getHttpServer())
         .get('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74f')
         .set({ Authorization: `Bearer ${adminAccessToken}` })
@@ -195,7 +195,7 @@ describe('Users', () => {
   // #region USERS - PUT
   ///////////////////////
   describe('PUT /:id', () => {
-    it('updateUser(), Should update a user', async () => {
+    it('Should update a user', async () => {
       return await request(app.getHttpServer())
         .put(`/users/${user.id}`)
         .send({ name: 'Paola Andrea Jourdán' })
@@ -207,7 +207,7 @@ describe('Users', () => {
           expect(response.body.name).toEqual('Paola Andrea Jourdán');
         });
     });
-    it('updateUser(), should return an error NotFoundException(User not found)', async () => {
+    it('Should return an error 404, Not Found (User not found)', async () => {
       return await request(app.getHttpServer())
         .put('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74f')
         .send({ name: 'Paola Andrea Jourdán' })
@@ -219,7 +219,7 @@ describe('Users', () => {
         });
     });
 
-    it('updateUser(), Should return an error 400 (BadRequest)', async () => {
+    it('Should return an error 400, Bad Request (Email must be an email)', async () => {
       return await request(app.getHttpServer())
         .put('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74c')
         .send({ email: 'jourdanpaomail.com' })
@@ -231,7 +231,7 @@ describe('Users', () => {
         });
     });
 
-    it('updateUser(), Should return an error 400, Bad Request, property should not exist', async () => {
+    it('Should return an error 400, Bad Request (Property should not exist)', async () => {
       return await request(app.getHttpServer())
         .put('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74c')
         .send({ lastname: ' Jourdán' })
@@ -250,7 +250,7 @@ describe('Users', () => {
   //////////////////////////
 
   describe('DELETE /:id', () => {
-    it('deleteUser(), Should delete a user', async () => {
+    it('Should delete a user', async () => {
       return await request(app.getHttpServer())
         .delete(`/users/${user.id}`)
         .set({ Authorization: `Bearer ${adminAccessToken}` })
@@ -261,7 +261,7 @@ describe('Users', () => {
           expect(response.body.id).toEqual(user.id);
         });
     });
-    it('deleteUser(), should return an error NotFoundException(User not found)', async () => {
+    it('Should return an error 404, Not Found (User not found)', async () => {
       return await request(app.getHttpServer())
         .delete('/users/c4ea2312-f839-4d0b-bb9d-379818fbe74f')
         .set({ Authorization: `Bearer ${adminAccessToken}` })

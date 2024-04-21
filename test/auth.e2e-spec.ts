@@ -29,69 +29,66 @@ let app: INestApplication;
 let server = null;
 let adminAccessToken = null;
 
-describe('Auth', () => {
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          load: [typeOrmConfig],
-        }),
-        TypeOrmModule.forRootAsync({
-          inject: [ConfigService],
-          useFactory: (configService: ConfigService) =>
-            configService.get('typeormTest'),
-        }),
-        //TypeOrmModule.forFeature([Users]),
-        // AppModule,
-        TypeOrmModule.forFeature([
-          Users,
-          Categories,
-          Products,
-          OrderDetails,
-          //Orders,
-        ]),
-        AuthModule,
-
-        JwtModule.register({
-          global: true,
-          signOptions: { expiresIn: '1h' },
-          secret: process.env.JWT_SECRET,
-        }),
-      ],
-      providers: [UserSeeder],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalInterceptors(
-      new ClassSerializerInterceptor(app.get(Reflector)),
-    );
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
+beforeAll(async () => {
+  const moduleFixture: TestingModule = await Test.createTestingModule({
+    imports: [
+      ConfigModule.forRoot({
+        isGlobal: true,
+        load: [typeOrmConfig],
       }),
-    );
+      TypeOrmModule.forRootAsync({
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) =>
+          configService.get('typeormTest'),
+      }),
+      //TypeOrmModule.forFeature([Users]),
+      // AppModule,
+      TypeOrmModule.forFeature([
+        Users,
+        Categories,
+        Products,
+        OrderDetails,
+        //Orders,
+      ]),
+      AuthModule,
 
-    // Seeder users
-    const seeder = app.get<UserSeeder>(UserSeeder);
-    await seeder.runAdmin();
-    await seeder.runCustomers();
-    await seeder.runTestCustomer();
+      JwtModule.register({
+        global: true,
+        signOptions: { expiresIn: '1h' },
+        secret: process.env.JWT_SECRET,
+      }),
+    ],
+    providers: [UserSeeder],
+  }).compile();
 
-    server = await app.init();
-  });
+  app = moduleFixture.createNestApplication();
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
-  afterAll(async () => {
-    await server.close();
-  });
+  // Seeder users
+  const userSeeders = app.get<UserSeeder>(UserSeeder);
+  await userSeeders.runAdmin();
+  await userSeeders.runCustomers();
+  await userSeeders.runTestCustomer();
 
-  //////////////////////////
-  // #region AUTH - SIGNIN
-  //////////////////////////
+  server = await app.init();
+});
 
-  describe('signin', () => {
-    it('signin(), Login admin user )', async () => {
+afterAll(async () => {
+  await server.close();
+});
+
+//////////////////////////
+// #region AUTH - SIGNIN
+//////////////////////////
+describe('Auth', () => {
+  describe('POST /signin', () => {
+    it('Login admin user', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/signin')
         .send({ email: 'jourdanmau@mail.com', password: 'Aa$12345678' });
@@ -103,7 +100,7 @@ describe('Auth', () => {
       return response;
     });
 
-    it('signin(), when the email does not have a valid format should return an error 401, Unauthorized, Invalid credenttials', async () => {
+    it('When the email does not have a valid format should return an error 401, Unauthorized (Invalid credenttials)', async () => {
       return await request(app.getHttpServer())
         .post('/auth/signin')
         .send({ email: 'jourdanpaomail.com', password: 'Aa$12345678' })
@@ -113,7 +110,7 @@ describe('Auth', () => {
           statusCode: 401,
         });
     });
-    it('signin(), when the user does not exist it should return an error 401, Unauthorized, Invalid credenttials', async () => {
+    it('When the user does not exist it should return an error 401, Unauthorized (Invalid credenttials)', async () => {
       return await request(app.getHttpServer())
         .post('/auth/signin')
         .send({
@@ -126,7 +123,7 @@ describe('Auth', () => {
           statusCode: 401,
         });
     });
-    it('signin(), when the password is wrong it should return an error 401, Unauthorized, Invalid credenttials', async () => {
+    it('When the password is wrong it should return an error 401, Unauthorized (Invalid credenttials)', async () => {
       return await request(app.getHttpServer())
         .post('/auth/signin')
         .send({
@@ -145,8 +142,8 @@ describe('Auth', () => {
   // #region AUTH - SIGNUP
   //////////////////////////
 
-  describe('signup', () => {
-    it('signup(), Should create a new user and return that', async () => {
+  describe('POST /signup', () => {
+    it('Should create a new user and return that', async () => {
       const mockUser = generateUser();
       delete mockUser.id;
 
@@ -162,7 +159,7 @@ describe('Auth', () => {
       expect(response.body.name).toEqual(mockUser.name);
     });
 
-    it('signup(), Should return an error 400 (BadRequest), passwords no match', async () => {
+    it('Should return an error 400, BadRequest (Passwords no match)', async () => {
       const mockUser = generateUser();
       delete mockUser.id;
 
@@ -184,7 +181,7 @@ describe('Auth', () => {
       // });
     });
 
-    it('signup(), Should return an error 400 (BadRequest), body error', async () => {
+    it('Should return an error 400, BadRequest (body errors)', async () => {
       const mockUser = generateUser();
       delete mockUser.id;
 
@@ -206,7 +203,7 @@ describe('Auth', () => {
           statusCode: 400,
         });
     });
-    it('signup(), Should return an error 400, Bad Request, property should not exist', async () => {
+    it('Should return an error 400, Bad Request (Property should not exist)', async () => {
       const mockUser = generateUser();
       delete mockUser.id;
 
@@ -227,7 +224,7 @@ describe('Auth', () => {
         });
     });
 
-    it('signup(), Should return an error 400, Bad Request, Email is already in use', async () => {
+    it('Should return an error 400, Bad Request (Email is already in use)', async () => {
       const mockUser = generateUser();
       delete mockUser.id;
 

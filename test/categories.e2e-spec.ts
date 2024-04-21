@@ -60,7 +60,7 @@ afterAll(async () => {
 //////////////////////////
 
 describe('Categories', () => {
-  it('GET /seeder should return an object ({ message: "Categories added" }) ', async () => {
+  it('GET /seeder, Should return an object ({ message: "Categories added" }) ', async () => {
     await request(app.getHttpServer())
       .get('/categories/seeder')
       .expect('Content-Type', /json/)
@@ -69,7 +69,7 @@ describe('Categories', () => {
       });
   });
 
-  it('GET /  should return list of categories', async () => {
+  it('GET /, Should return list of categories', async () => {
     return await request(app.getHttpServer())
       .get('/categories')
       .expect('Content-Type', /json/)

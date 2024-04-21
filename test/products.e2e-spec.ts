@@ -81,10 +81,10 @@ beforeAll(async () => {
 
   server = await app.init();
   // Seeder users
-  const seeder = app.get<UserSeeder>(UserSeeder);
-  await seeder.runAdmin();
-  await seeder.runCustomers();
-  await seeder.runTestCustomer();
+  const usersSeeder = app.get<UserSeeder>(UserSeeder);
+  await usersSeeder.runAdmin();
+  await usersSeeder.runCustomers();
+  await usersSeeder.runTestCustomer();
 
   // Login admin user
   const admin = await request(app.getHttpServer())
