@@ -137,7 +137,7 @@ volumes:
   pgdata:
 ```
 
-El archivo .env.devepment posee la mismas estruectura que para la instalación local.
+El archivo .env.devepment posee la mismas estructura que para la instalación local, con excepción de la **vasriable DB_HOST que debemos setearla en postgresdb**
 
 Como vemos en el archivo docker-compose.yml, se crean tres contenedores:
 
@@ -150,6 +150,49 @@ Como vemos en el archivo docker-compose.yml, se crean tres contenedores:
 ```bash
 # Levantamos los contedores
 docker compose up -d
+```
+
+```bash
+# Listamos los contenedores existes
+docker container ls -a
+# Eliminamos los contenedores
+docker rm --force <CONTAINER ID> ... <CONTAINER ID>
+# Listamos las imágenes
+docker images -a
+# Eliminamos las imágenes
+docker rmi <IMAGE ID> ... <IMAGE ID>
+```
+
+De esta manera, podemos ver la base de datos a través de pgadmin en la url: http://localhost:5050
+
+Para configurar el servidor debemos utilizar las siguientes variables de entorno:
+
+- Nombre: App-Docker
+- Nombre/Dirección del servidor: postgresdb
+- Puerto: DB_PORT
+- Base de datos de mantenimiento: DB_NAME
+- Nombre de usuario: DB_USERNAME
+- Contraseña: DB_PASSWORD
+
+## Ejecución de test en docker
+
+El único requisito para ejecutar los test dentro del contenedor de la aplicación es **crear un archivo .env.test exactamente igual a .env.delopment**
+
+```bash
+# Listamos los contenedores en ejecución
+docker ps
+
+# Ingresamos al docker en forma interactiva
+docker exec -it <CONTAINER_ID> sh
+
+# Verificamos que estamos dentro del contenedor
+ls -ltra
+
+# Ejecutamos test unitarios
+npm run test
+
+# Ejecutamos test e2e
+npm run test:e2e
 ```
 
 ## Links
