@@ -93,6 +93,8 @@ export class ProductsService {
     initialData.map(async (product) => {
       const category = categories.find((cat) => cat.name === product.category);
 
+      // this.remove(product.id)
+
       if (category) {
         const newProd = {
           ...product,

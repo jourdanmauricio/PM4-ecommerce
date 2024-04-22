@@ -18,6 +18,9 @@ import { ProductsService } from './../products/products.service';
 import { FilesService } from './files.service';
 import { AuthGuard } from './../guards/auth.guard';
 import { UUID } from 'crypto';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../models/roles.enum';
+import { RolesGuard } from '../guards/roles.guard';
 
 @ApiBearerAuth()
 @ApiTags('Files')
@@ -30,6 +33,8 @@ export class FilesController {
   ) {}
 
   @Put('uploadImage/:id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseInterceptors(FileInterceptor('image', { limits: { files: 1 } }))
   async uploadProductImage(
     @Param('id', ParseUUIDPipe) id: UUID,

@@ -13,6 +13,9 @@ import { AuthGuard } from './../guards/auth.guard';
 // import { Public } from './../decorators/public.decorator';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './order.dto';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../models/roles.enum';
+import { RolesGuard } from '../guards/roles.guard';
 import { UUID } from 'crypto';
 
 @ApiBearerAuth()
@@ -23,8 +26,8 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Get()
-  // Solo admin?
-  // @Public()
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   getOrders() {
     return this.ordersService.findAll();
   }

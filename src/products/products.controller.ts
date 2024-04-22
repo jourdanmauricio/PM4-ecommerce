@@ -23,6 +23,9 @@ import {
   UpdateProductDto,
 } from './product.dto';
 import { UUID } from 'crypto';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../models/roles.enum';
+import { RolesGuard } from '../guards/roles.guard';
 
 @ApiTags('Products')
 @Controller('products')
@@ -67,12 +70,16 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Post()
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   createProduct(@Body() product: CreateProductDto) {
     return this.productsService.create(product);
   }
 
   @ApiBearerAuth()
   @Put(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   updateProduct(
     @Param('id', ParseUUIDPipe) id: UUID,
     @Body() payload: UpdateProductDto,
@@ -82,6 +89,8 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Delete(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   deleteProduct(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.productsService.remove(id);
   }
