@@ -149,9 +149,15 @@ describe('Products', () => {
       return await request(app.getHttpServer())
         .get('/products/seeder')
         .expect('Content-Type', /json/)
-        .expect(200, {
-          message: 'Products added',
+        .expect(200)
+        .then((response) => {
+          expect(response.body).toHaveProperty('message');
+          expect(response.body).toHaveProperty('total');
+          expect(response.body).toHaveProperty('data');
         });
+      // .expect(200, {
+      //   message: 'Products added',
+      // });
     });
     it('Should return a list of products', async () => {
       return await request(app.getHttpServer())

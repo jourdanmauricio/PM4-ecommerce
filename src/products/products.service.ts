@@ -88,28 +88,68 @@ export class ProductsService {
   }
 
   async preLoadProducts() {
-    const categories = await this.categoriesRepository.find();
+    // const categories = await this.categoriesRepository.find();
+    // initialData.map(async (product) => {
+    //   const category = categories.find((cat) => cat.name === product.category);
+    //   // this.remove(product.id)
+    //   if (category) {
+    //     const newProd = {
+    //       ...product,
+    //       category: category,
+    //     };
+    //     await this.productsRepository
+    //       .createQueryBuilder()
+    //       .insert()
+    //       .values(newProd)
+    //       .orUpdate(['description', 'price', 'imgUrl', 'stock'], ['name'])
+    //       .execute();
+    //   }
+    // });
+    // return { message: 'Products added' };
 
-    initialData.map(async (product) => {
+    const prodCreated = [];
+    const prodError = [];
+    const categories = await this.categoriesRepository.find();
+    for await (const product of initialData) {
+      const found = await this.productsRepository.findOneBy({
+        name: product.name,
+      });
+      if (found) {
+        // Elimino el prod anterior
+        try {
+          await this.remove(found.id);
+        } catch (error) {
+          prodError.push({ name: product.name, error: error.message });
+          continue;
+        }
+      }
+
       const category = categories.find((cat) => cat.name === product.category);
 
-      // this.remove(product.id)
-
-      if (category) {
-        const newProd = {
-          ...product,
-          category: category,
-        };
-
-        await this.productsRepository
-          .createQueryBuilder()
-          .insert()
-          .values(newProd)
-          .orUpdate(['description', 'price', 'imgUrl', 'stock'], ['name'])
-          .execute();
+      // Validamos la categoría
+      if (!category) {
+        prodError.push({ name: product.name, error: 'Category not found' });
+        continue;
       }
-    });
 
-    return { message: 'Products added' };
+      // Creamos el producto
+      const newProd = {
+        ...product,
+        category: category,
+      };
+
+      const newProduct = this.productsRepository.create(newProd);
+
+      const result = await this.productsRepository.save(newProduct);
+      prodCreated.push({ id: result.id, name: result.name });
+    }
+    return {
+      message: 'Initial products loaded successfully',
+      total: initialData.length,
+      data: {
+        created: prodCreated,
+        errors: prodError,
+      },
+    };
   }
 }
