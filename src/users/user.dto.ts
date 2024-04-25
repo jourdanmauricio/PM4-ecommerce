@@ -10,10 +10,20 @@ import {
   Validate,
   IsEmpty,
   IsDate,
+  MaxDate,
+  //  MinDate,
 } from 'class-validator';
 import { ApiHideProperty, PartialType } from '@nestjs/swagger';
 
 import { MatchPass } from './../decorators/MatchPass.decorator';
+import { Transform } from 'class-transformer';
+
+const today = new Date();
+const maxDate = new Date(
+  today.getFullYear() - 18,
+  today.getMonth(),
+  today.getDate(),
+);
 
 export class CreateUserDto {
   /**
@@ -92,9 +102,15 @@ export class CreateUserDto {
   @MaxLength(20)
   readonly city?: string;
 
-  // @IsNotEmpty()
+  /**
+   * Fecha de cumpleaños: debe ser mayor de 18 años
+   * @example 2001-01-01
+   */
+  @IsOptional()
   @IsDate()
-  readonly birthday: Date;
+  @Transform(({ value }) => new Date(value))
+  @MaxDate(maxDate)
+  readonly birthday?: Date;
 
   /**
    * Administrador: No de debe enviar

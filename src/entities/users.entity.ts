@@ -36,7 +36,7 @@ export class Users {
   @Column({ type: 'varchar', length: 50, nullable: true })
   city: string;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: true })
   birthday: Date;
 
   @Expose({ groups: ['role:admin'] })

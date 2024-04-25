@@ -56,6 +56,7 @@ export class ProductsController {
     return this.productsService.findAll(page, limit);
   }
 
+  @ApiBearerAuth()
   @Get('seeder')
   @Public()
   addProducts() {
