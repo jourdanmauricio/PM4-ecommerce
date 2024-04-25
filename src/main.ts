@@ -36,6 +36,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
+  await app.listen(process.env.PORT);
+
+  console.log(`Server listen on ${process.env.HOST}:${process.env.PORT}`);
   console.log('Users Seeders');
   const userSeeders = app.get<UserSeeder>(UserSeeder);
   await userSeeders.runAdmin();
@@ -49,8 +52,5 @@ async function bootstrap() {
   console.log('Products Seeders');
   const productsSeeder = app.get<ProductsService>(ProductsService);
   await productsSeeder.preLoadProducts();
-
-  await app.listen(process.env.PORT);
-  console.log(`Server listen on ${process.env.HOST}:${process.env.PORT}`);
 }
 bootstrap();

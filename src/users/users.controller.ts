@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   Put,
   Query,
+  Req,
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
@@ -54,7 +55,15 @@ export class UsersController {
     return this.usersService.findAll(page, limit);
   }
 
+  @Get('profile')
+  getProfile(@Req() request) {
+    const user = request.user;
+    return this.usersService.findOne(user.id);
+  }
+
   @Get(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   getUserById(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.usersService.findOne(id);
   }

@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 // Se inyecta a través de inuección de dependencias
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './../decorators/public.decorator';
+import { Role } from '../models/roles.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -39,6 +40,14 @@ export class AuthGuard implements CanActivate {
       const payload = this.jwtService.verify(token, { secret });
       payload.iat = new Date(payload.iat * 1000);
       payload.exp = new Date(payload.exp * 1000);
+
+      // Verificamos que el paramId coincida con el id del token
+      const paramId = request.params.id;
+
+      if (paramId) {
+        if (paramId !== payload.id && !payload.roles.includes(Role.ADMIN))
+          throw new UnauthorizedException('Unauthorized');
+      }
 
       request.user = payload;
 

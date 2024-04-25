@@ -1,6 +1,7 @@
 .env.development
 .env.test
 *.txt 
+*.ods
 
 # compiled output
 /dist

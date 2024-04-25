@@ -15,6 +15,8 @@ export const generateUser = () => {
     email: faker.internet.email(),
     phone: faker.number.int({ min: 1000000000, max: 9999999999 }),
     address: faker.location.streetAddress({ useFullAddress: true }),
+    birthday: faker.date.birthdate(),
+    // birthday: new Date(),
     city,
     country,
   };

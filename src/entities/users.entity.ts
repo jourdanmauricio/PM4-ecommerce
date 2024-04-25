@@ -36,6 +36,9 @@ export class Users {
   @Column({ type: 'varchar', length: 50, nullable: true })
   city: string;
 
+  @Column({ type: 'timestamptz' })
+  birthday: Date;
+
   @Expose({ groups: ['role:admin'] })
   @Column({ name: 'is_admin', default: false })
   isAdmin: boolean;

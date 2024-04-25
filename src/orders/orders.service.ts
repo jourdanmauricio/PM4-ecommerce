@@ -11,6 +11,7 @@ import { UsersService } from './../users/users.service';
 import { ProductsService } from './../products/products.service';
 import { OrderDetails } from '../entities/orderDetails.entity';
 import { v4 as uuid } from 'uuid';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class OrdersService {
@@ -42,29 +43,27 @@ export class OrdersService {
     return order;
   }
 
-  async create(order: CreateOrderDto) {
+  async create(userId: UUID, orderProducts: CreateOrderDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
     try {
       await queryRunner.startTransaction(); // START
-      const user = await this.usersService.findOne(order.userId);
+      const user = await this.usersService.findOne(userId);
       const newOrder = this.ordersRepository.create({ user });
 
       const resultOrder = await queryRunner.manager.save(newOrder);
 
       let price = 0;
       const products = [];
-      for await (const prodId of order.products) {
-        const product = await this.productsService.findOne(prodId.id);
-
+      for await (const prodId of orderProducts.products) {
+        const product = await this.productsService.findOne(prodId);
         if (product.stock < 1)
           throw new ConflictException(
             `Opps. The product is currently out of stock: ${product.name}`,
           );
         price += Number(product.price);
         product.stock -= 1;
-
         const updProduct = await queryRunner.manager.save(product);
         products.push(updProduct);
       }

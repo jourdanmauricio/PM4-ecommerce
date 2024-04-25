@@ -9,6 +9,7 @@ import {
   Matches,
   Validate,
   IsEmpty,
+  IsDate,
 } from 'class-validator';
 import { ApiHideProperty, PartialType } from '@nestjs/swagger';
 
@@ -90,6 +91,10 @@ export class CreateUserDto {
   @MinLength(5)
   @MaxLength(20)
   readonly city?: string;
+
+  // @IsNotEmpty()
+  @IsDate()
+  readonly birthday: Date;
 
   /**
    * Administrador: No de debe enviar

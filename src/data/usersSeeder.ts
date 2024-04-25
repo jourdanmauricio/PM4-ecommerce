@@ -27,6 +27,7 @@ export class UserSeeder {
     adminUser.country = 'Argentina';
     adminUser.address = 'Av 7 nro 1532';
     adminUser.city = 'La Plata';
+    adminUser.birthday = new Date('1794-10-20');
     adminUser.isAdmin = true;
     await this.userRepository.save(adminUser);
   }
@@ -50,6 +51,7 @@ export class UserSeeder {
       newCustomer.country = customer.country;
       newCustomer.address = customer.address;
       newCustomer.city = customer.city;
+      newCustomer.birthday = new Date();
       newCustomer.isAdmin = false;
       await this.userRepository.save(newCustomer);
     }
@@ -71,6 +73,7 @@ export class UserSeeder {
     customerUser.country = 'Argentina';
     customerUser.address = 'Av 7 nro 1532';
     customerUser.city = 'La Plata';
+    customerUser.birthday = new Date('1975-01-16');
     customerUser.isAdmin = false;
     await this.userRepository.save(customerUser);
   }

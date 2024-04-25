@@ -85,8 +85,8 @@ npm run start
 
 Consulta de endpoints
 
-https://localhost:3000/health
-https://localhost:3000/products
+- https://localhost:3000/health
+- https://localhost:3000/products
 
 ## Instalación desde imagen docker
 
@@ -214,8 +214,6 @@ npm run test:e2e
 ## Clases Homework
 
 [Detalle de las Homeworks](./docs/homeworks)
-
-Carpeta con imagen de prod
 
 <style>
   h1 { color: #713f12; }

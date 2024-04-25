@@ -5,6 +5,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -32,13 +33,22 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
+  @Get('myOrders')
+  myOrders(@Req() request) {
+    const user = request.user;
+    return this.ordersService.findOne(user.id);
+  }
+
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Get(':id')
   getOrder(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.ordersService.findOne(id);
   }
 
   @Post()
-  addOrder(@Body() order: CreateOrderDto) {
-    return this.ordersService.create(order);
+  addOrder(@Body() orderProducts: CreateOrderDto, @Req() request) {
+    const user = request.user;
+    return this.ordersService.create(user.id, orderProducts);
   }
 }
